@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+	</head>
+
+	<body>
+		<script>
+
+			"use strict";
+
+			var person = {
+				age: 23
+			};
+
+			Object.defineProperty(person, "firstName", {
+				configurable: true,
+				enumerable: true,
+				// value: "Bob",
+				// writable: true
+				get: function() {
+					console.log("getting first name");
+					return this._firstName;
+				},
+				set: function(value) {
+					console.log("setting first name");
+					this._firstName = value;
+				}
+			});
+
+			person.firstName = "Tim";
+
+			person.lastName = "Jones";
+
+			for (var prop in person) {
+				console.log(prop + " = " + person[prop]);
+			}
+
+			//console.dir(person);
+
+			function Person(firstName, lastName) {
+				// instance property
+				this.firstName = firstName;
+				this.lastName = lastName;
+
+				this.create("Tim Smith");
+			}
+
+			// prototype property
+			Person.prototype.getFullName = function() {
+
+			}
+
+			Person.create = function(name) {
+				var nameTokens = name.split(" ");
+				return new Person(nameTokens[0], nameTokens[1]);
+			}
+
+			var p = Person.create("Tim Smith");
+
+
+
+
+
+		</script>
+	</body>
+
+</html>

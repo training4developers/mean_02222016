@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<!-- Angular App Does Not Exist Here -->
+
+		<div dfs-app="MyApp">
+			<div ng-controller="MyCtrl1">
+				{{message}}
+			</div>
+			<div ng-controller="MyCtrl2">
+				{{message}}
+			</div>
+		</div>
+
+		<div id="myApp2">
+			<div ng-controller="MyCtrl1">
+				2 {{message}}
+			</div>
+			<div ng-controller="MyCtrl2">
+				2 {{message}}
+			</div>
+		</div>
+
+		<!-- Angular App Does Not Exist Here -->
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl1", function($scope) {
+					$scope.message = "Hello World!";
+				})
+				.controller("MyCtrl2", function($scope) {
+					$scope.message = "Bye World!";
+				});
+
+			// angular.bootstrap(
+			// 	document.getElementById("myApp1"), ["MyApp"]);
+			//
+			// angular.bootstrap(
+			// 	document.getElementById("myApp2"), ["MyApp"]);
+
+			// ng-app demo
+			document.addEventListener("DOMContentLoaded", function() {
+
+				var ngAppDOMElement = document.querySelector("[dfs-app]");
+				var ngAppModule = ngAppDOMElement.getAttribute("dfs-app");
+
+				angular.bootstrap(ngAppDOMElement, [ngAppModule]);
+
+			});
+
+
+
+		</script>
+	</body>
+
+</html>

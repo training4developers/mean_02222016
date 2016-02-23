@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<style>
+
+			label {
+				display:block;
+				border:1px solid red;
+			}
+
+			label > span {
+				display:inline-block;
+				width:150px;
+			}
+
+
+
+		</style>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				Color Filter: <input ng-model="colorFilter">
+
+				<ul>
+					<li ng-repeat="color in colors | filter:colorFilter | orderBy:'toString()':true">{{color}}</li>
+				</ul>
+
+				New Color: <input ng-model="newColor">
+				<button ng-click="addColor()">Add Color</button>
+
+				Country Filter: <input ng-model="countryFilter">
+
+				<ul>
+					<li ng-repeat="country in countries | filter:{'name':countryFilter} | orderBy:'population':true">
+						{{country.name}} - {{country.capital}}
+					</li>
+				</ul>
+
+				<form>
+					<label>
+						<span>Country Name</span> <input ng-model="country.name">
+					</label>
+					<label>
+						<span>Country Capital</span> <input ng-model="country.capital">
+					</label>
+					<label>
+						<span>Country Pop</span> <input ng-model="country.population">
+					</label>
+					<button type="button" ng-click="addCountry()">Add Country</button>
+				</form>
+
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+
+					console.log("controller ran");
+
+					$scope.colors = [
+						"green","white","saffron","red","blue","brown","black","yellow","purple"
+					];
+
+					$scope.addColor = function() {
+
+						//$scope.$apply(function() {
+							$scope.colors.push($scope.newColor);
+						//});
+					};
+
+					$scope.addCountry = function() {
+						$scope.countries.push($scope.country);
+						$scope.country = {};
+					};
+
+
+					// window.addColor = function() {
+					//
+					// 	$scope.$apply(function() {
+					// 		$scope.colors.push($scope.newColor);
+					// 	});
+					// 	// console.dir($scope.colors);
+					//
+					// 	// $scope.$digest();
+					// };
+
+					console.dir($scope.$eval("colors | filter:colorFilter | orderBy:'toString()':true"));
+
+					$scope.countries = [
+						{ name: "Mexico", capital: "Mexico City", population: 100 },
+						{ name: "India", capital: "New Delhi", population: 1300 },
+						{ name: "United States", capital: "Washington, DC", population: 330 }
+					];
+
+				});
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}<br>
+				<input ng-model="message">
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hello World!";
+
+					$scope.$watch(function() {
+						var count = 1000000000;
+						while(count--) {
+						}
+						console.log("$digest loop ran");
+					})
+				});
+
+		</script>
+	</body>
+
+</html>

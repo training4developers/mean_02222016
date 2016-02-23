@@ -4,76 +4,38 @@
 
 	<head>
 		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
 	</head>
 
 	<body>
+		<div ng-app="MyApp">
+			{{rootMessage}}
+			<div ng-controller="MyCtrl">
+				{{childMessage}}
+			</div>
+		</div>
+
 		<script>
 
 			"use strict";
 
-			function Person(firstName, lastName) {
-				this.firstName = firstName;
-				this.lastName = lastName;
-			}
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+					$rootScope.rootMessage = "Discover Rocks!";
+					$scope.childMessage = "Discover is Amazing!";
 
-			Person.prototype.getFullName = function() {
-				return this.firstName + " " + this.lastName;
-			};
+					setTimeout(function() {
 
-			function Student(studentId, firstName, lastName) {
-				this._super.call(this, firstName, lastName);
-				this.studentId = studentId;
-			}
+						//$scope.$apply(function() {
+							$rootScope.rootMessage = "Discover Rocks!!!!!!!!!!";
+							$scope.childMessage = "Discover is Amazing!!!!!!!!!!";
+						//});
+						$scope.$digest();
+						console.log("timeout expired");
 
-			Student.prototype = Object.create(Person.prototype);
-			Student.prototype.constructor = Student;
-			Student.prototype._super = Person;
+					}, 2000);
 
-			Student.prototype.getRecordInfo = function() {
-				return this.studentId + " " + this.lastName + ", " + this.firstName;
-			}
-
-
-
-			var p = new Student(1, "Bob", "Smith");
-			console.dir(p);
-			//
-			// var pProto = Object.getPrototypeOf(p);
-			// console.dir(pProto);
-			//
-			// console.log(Person.prototype === pProto);
-			//
-			// console.dir(Person);
-			//
-			//
-			// function Person() {
-			//
-			// }
-			//
-			// Person.prototype.getFullName = function() {
-			// 	return this.firstName + " " + this.lastName;
-			// };
-			//
-			// var p = new Person();
-			//
-			// var p2 = Object.create(Person.prototype);
-			// Person.call(p2);
-			//
-			// console.dir(Person);
-			//
-			//
-
-
-			// class Person2 {
-			//
-			// 	constructor(firstName, lastName) {
-			// 		this.firstName = firstName;
-			// 		this.lastName = lastName;
-			// 	}
-			// }
-			//
-			// console.log(typeof Person2);
-			// console.dir(Person2);
+				});
 
 		</script>
 	</body>
