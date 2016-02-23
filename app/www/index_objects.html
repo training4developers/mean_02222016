@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+	</head>
+
+	<body>
+		<script>
+
+ 			// bad practice
+			//var o = new Object();
+
+			var o = {
+				firstName: "Bob",
+				"lastName": "Smith",
+				"min-age": 45
+			};
+
+			o.city = "Phoenix";
+
+			console.log(o.hasOwnProperty("city"));
+
+			delete o.city;
+
+			console.log(o.hasOwnProperty("city"));
+
+			console.dir(o);
+
+			console.log(o.firstName);
+			console.log(o["min-age"]);
+
+
+		</script>
+	</body>
+
+</html>

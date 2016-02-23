@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+	</head>
+
+	<body>
+		<script>
+
+			"use strict";
+
+			function myFunc(a,b) {
+				console.dir(this);
+				console.log(a,b);
+			}
+
+			myFunc();
+			window.myFunc();
+
+			var o = {
+				id: 2,
+				myFunc: myFunc
+			};
+			o.myFunc();
+
+			var n = new myFunc();
+
+			console.log(n instanceof myFunc);
+
+			myFunc.call({ id: 3 }, 1, 2);
+			myFunc.apply({ id: 3 }, [1, 2]);
+
+			var fn = myFunc.bind({ id: 4 }, 1);
+
+			fn.call({ id: 5 }, 2);
+
+
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+	</head>
+
+	<body>
+		<script>
+
+			"use strict";
+
+			function createScope(parentScope) {
+
+				function watchFn() {
+
+				}
+
+				function broadcastFn() {
+
+				}
+
+				return {
+					$parent: parentScope,
+					$watch: watchFn,
+					$broadcast: broadcastFn
+				};
+
+			}
+
+			var rootScope = createScope(null);
+
+			var childScope = createScope(rootScope);
+
+			childScope.$watch()
+
+			var Scope = {
+				$watch: function() {
+
+				},
+				$broadcast: function() {
+
+				}
+			}
+
+			var rootScope = Object.create(Scope);
+			var childScope = Object.create(rootScope);
+
+			childScope.$watch();
+
+
+
+
+		</script>
+	</body>
+
+</html>

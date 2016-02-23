@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+	</head>
+
+	<body>
+		<script>
+
+			"use strict";
+
+			function Person(firstName, lastName) {
+				this.firstName = firstName;
+				this.lastName = lastName;
+			}
+
+			Person.prototype.getFullName = function() {
+				return this.firstName + " " + this.lastName;
+			};
+
+			function Student(studentId, firstName, lastName) {
+				this._super.call(this, firstName, lastName);
+				this.studentId = studentId;
+			}
+
+			Student.prototype = Object.create(Person.prototype);
+			Student.prototype.constructor = Student;
+			Student.prototype._super = Person;
+
+			Student.prototype.getRecordInfo = function() {
+				return this.studentId + " " + this.lastName + ", " + this.firstName;
+			}
+
+
+
+			var p = new Student(1, "Bob", "Smith");
+			console.dir(p);
+			//
+			// var pProto = Object.getPrototypeOf(p);
+			// console.dir(pProto);
+			//
+			// console.log(Person.prototype === pProto);
+			//
+			// console.dir(Person);
+			//
+			//
+			// function Person() {
+			//
+			// }
+			//
+			// Person.prototype.getFullName = function() {
+			// 	return this.firstName + " " + this.lastName;
+			// };
+			//
+			// var p = new Person();
+			//
+			// var p2 = Object.create(Person.prototype);
+			// Person.call(p2);
+			//
+			// console.dir(Person);
+			//
+			//
+
+
+			// class Person2 {
+			//
+			// 	constructor(firstName, lastName) {
+			// 		this.firstName = firstName;
+			// 		this.lastName = lastName;
+			// 	}
+			// }
+			//
+			// console.log(typeof Person2);
+			// console.dir(Person2);
+
+		</script>
+	</body>
+
+</html>

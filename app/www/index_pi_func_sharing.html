@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+	</head>
+
+	<body>
+		<script>
+
+			"use strict";
+
+			function getFullName() {
+				return this.firstName + " " + this.lastName;
+			}
+
+
+			var parent = {
+				getFullName: getFullName
+			};
+
+			var child1 = Object.create(parent);
+			child1.firstName = "Bob";
+			child1.lastName = "Smith";
+
+			var child2 = Object.create(parent);
+			child2.firstName = "Jane";
+			child2.lastName = "Smith";
+
+			console.log(child1.getFullName());
+			console.log(child2.getFullName());
+
+			console.log(child1.getFullName === child2.getFullName);
+
+		</script>
+	</body>
+
+</html>
