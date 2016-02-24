@@ -40,6 +40,8 @@
 				<ul>
 					<li ng-repeat="country in countries | filter:{'name':countryFilter} | orderBy:'population':true">
 						{{country.name}} - {{country.capital}}
+
+						<button ng-click="viewCountry($event, country)">View Country</button>
 					</li>
 				</ul>
 
@@ -65,6 +67,15 @@
 
 			angular.module("MyApp", [])
 				.controller("MyCtrl", function($scope) {
+
+					$scope.viewCountry = function($event, country) {
+						console.dir($scope);
+						console.dir(this);
+						console.dir(country);
+						console.log(this.country === country);
+						console.dir($event);
+					};
+
 
 					console.log("controller ran");
 

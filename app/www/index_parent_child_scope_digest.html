@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			{{rootMessage}}
+			<div ng-controller="MyCtrl">
+				{{childMessage}}
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+					$rootScope.rootMessage = "Discover Rocks!";
+					$scope.childMessage = "Discover is Amazing!";
+
+					setTimeout(function() {
+
+						//$scope.$apply(function() {
+							$rootScope.rootMessage = "Discover Rocks!!!!!!!!!!";
+							$scope.childMessage = "Discover is Amazing!!!!!!!!!!";
+						//});
+						$scope.$digest();
+						console.log("timeout expired");
+
+					}, 2000);
+
+				});
+
+		</script>
+	</body>
+
+</html>

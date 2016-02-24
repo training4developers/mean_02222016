@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<style>
+
+		div.ng-scope {
+			margin:5px;
+			padding:5px;
+			border: 1px solid red;
+		}
+
+		</style>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			RootScope: {{message}} - Scope Id: {{$id}}
+			<div ng-controller="MyCtrl">
+				Child Scope: {{message}} - Scope Id: {{$id}}
+				<div ng-controller="MyCtrl">
+					Child Scope: {{message}} - Scope Id: {{$id}}
+				</div>
+				<div ng-controller="MyCtrl">
+					Child Scope: {{message}} - Scope Id: {{$id}}
+				</div>
+			</div>
+			<div ng-controller="MyCtrl">
+				Child Scope: {{message}} - Scope Id: {{$id}}
+			</div>
+			<div ng-controller="MyCtrl">
+				Child Scope: {{message}} - Scope Id: {{$id}}
+			</div>
+			<div ng-controller="MyCtrl">
+				Child Scope: {{message}} - Scope Id: {{$id}}
+				<div ng-controller="MyCtrl">
+					Child Scope: {{message}} - Scope Id: {{$id}}
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $rootScope) {
+
+					$rootScope.message = "Discover Rocks!";
+
+					console.dir($scope);
+
+				});
+
+		</script>
+	</body>
+
+</html>
