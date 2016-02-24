@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+
+		<script>
+
+			"use strict";
+
+			var nums = [
+				{ id: 1 },
+				{ id: 2 },
+				{ id: 3 },
+				{ id: 4 },
+				{ id: 5 }
+			];
+
+			var ids = nums.map(function(n) {return n.id;})
+			console.dir(ids);
+
+			// var maxValue = Math.max.apply(
+			// 	Math,
+			//
+			// );
+			//
+
+			function f(a,b,c,d,e) {
+				console.log(a,b,c,d,e);
+				console.dir(arguments);
+			}
+
+			f.apply(null, ids);
+
+			f(1,2,4,4)
+
+			var maxValue = Math.max.apply(Math, ids);
+
+			Math.max(...ids);
+			//
+			// console.log(maxValue + 1);
+
+
+
+		</script>
+	</body>
+
+</html>

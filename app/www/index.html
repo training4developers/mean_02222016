@@ -5,59 +5,161 @@
 	<head>
 		<title>Welcome to MEAN Stack!</title>
 		<script src="libs/angular/angular.js"></script>
+		<style>
+
+			input.ng-touched.ng-invalid {
+				border: 2px solid red;
+			}
+
+			textarea {
+				vertical-align: top;
+			}
+
+
+		</style>
 	</head>
 
 	<body>
 		<div ng-app="MyApp">
-			<script id="view-row" type="text/ng-template">
-				{{color.name}}
-				<button ng-click="editRow()">Edit</button>
-			</script>
-			<script id="edit-row" type="text/ng-template">
-				<input ng-model="editColor.name">
-				<button ng-click="saveRow()">Save</button>
-				<button ng-click="cancelEditRow()">Cancel</button>
-			</script>
 			<div ng-controller="MyCtrl">
-				<ul>
-					<li ng-repeat-start="color in colors"
-						ng-if="color.id !== editRowId" ng-include="'view-row'">
-					</li>
-					<li ng-repeat-end
-						ng-if="color.id === editRowId" ng-include="'edit-row'">
-					</li>
-				</ul>
+
+				<form name="contactForm" novalidate>
+
+					<div>
+						<label>
+							First Name: <input ng-model="contact.firstName" name="contactFirstName" required>
+						</label>
+						<span ng-show="contactForm.contactFirstName.$invalid && contactForm.contactFirstName.$touched">
+							Please enter a first name.
+						</span>
+					</div>
+
+					<div>
+						<label>
+							Last Name: <input ng-model="contact.lastName" name="contactLastName" required>
+						</label>
+						<span ng-show="contactForm.contactLastName.$invalid && contactForm.contactLastName.$touched">
+							Please enter a last name.
+						</span>
+					</div>
+
+					<div>
+						<label>
+							Age: <input type="number" ng-model="contact.age" name="contactAge" required>
+						</label>
+						<span ng-show="contactForm.contactAge.$invalid && contactForm.contactAge.$touched">
+							Please enter an age.
+						</span>
+					</div>
+
+					<div>
+						<label>
+							Email: <input type="email" ng-model="contact.email" name="contactEmail" required>
+						</label>
+						<span ng-show="contactForm.contactEmail.$invalid && contactForm.contactEmail.$touched">
+							Please enter an email.
+						</span>
+					</div>
+
+
+
+					<div>
+						<label>
+							Did you purchase a product? <input type="checkbox" ng-model="contact.purchasedProduct" name="contactPurchasedProduct">
+						</label>
+					</div>
+
+					<div ng-if="contact.purchasedProduct">
+
+						<div>
+							<label>
+								Date Purchased: <input type="date" ng-model="contact.purchaseDate" name="contactPurchaseDate">
+							</label>
+							<span ng-show="contactForm.contactPurchaseDate.$invalid && contactForm.contactPurchaseDate.$touched">
+								Please enter a purchase date.
+							</span>
+						</div>
+
+						<fieldset>
+							<legend>What would you like to do?</legend>
+
+							<div>
+								<label>
+									<input type="radio" ng-model="contact.productAction"
+										name="contactProductActionReturnProduct" value="return product">
+									Return Product
+								</label>
+							</div>
+
+							<div>
+								<label>
+									<input type="radio" ng-model="contact.productAction"
+										name="contactProductActionExchangeProduct" value="exchange product">
+									Exchange Product
+								</label>
+							</div>
+
+							<div>
+								<label>
+									<input type="radio" ng-model="contact.productAction"
+										name="contactProductActionComplimentProduct" value="compliment product">
+									Compliment Product
+								</label>
+							</div>
+
+						</fieldset>
+
+					</div>
+
+					<div>
+						<label> Store Location:
+							<select ng-model="contact.storeLocation" name="contactStoreLocation"
+								ng-options="location.id as location.city group by location.state
+									for location in locations | orderBy:'state'">
+								<option value="">Select One...</option>
+							</select>
+						</label>
+					<div>
+						<label> Comments
+							<textarea ng-model="contact.comments" name="contactComments"></textarea>
+						</label>
+					</div>
+
+					<button type="button" ng-click="sendContact()"
+						ng-disabled="contactForm.$invalid">Submit</button>
+
+
+				</form>
+
 			</div>
 		</div>
-
 		<script>
-
-			"use strict";
 
 			angular.module("MyApp", [])
 				.controller("MyCtrl", function($scope) {
 
-					$scope.colors = [
-						{ id: 1, name: "red" },
-						{ id: 2, name: "green" },
-						{ id: 3, name: "blue" },
-						{ id: 4, name: "purple" }
-					];
-
-					$scope.editRow = function() {
-						$scope.editRowId = 	this.color.id;
-						angular.extend($scope.editColor = {}, this.color);
+					$scope.contact = {
+						purchasedProduct: false
 					};
 
-					$scope.saveRow = function() {
-						$scope.editRowId = 	-1;
-						angular.extend(this.color, $scope.editColor);
-					}
+					$scope.sendContact = function() {
+						//$scope.contactForm.$setUntouched();
+						console.log($scope);
+					};
 
-					$scope.cancelEditRow = function() {
-						$scope.editRowId = -1;
-					}
-
+					$scope.locations = [
+						{ id: 1, city: "Phoenix", state: "Arizona" },
+						{ id: 2, city: "Chicago", state: "Illinois" },
+						{ id: 3, city: "Lake Park", state: "Utah" },
+						{ id: 4, city: "New Albany", state: "Ohio" },
+						{ id: 5, city: "Mesa", state: "Arizona" },
+						{ id: 6, city: "Flagstaff", state: "Arizona" },
+						{ id: 7, city: "Springfield", state: "Illinois" },
+						{ id: 8, city: "Cleveland", state: "Ohio" },
+						{ id: 9, city: "Cincinatti", state: "Ohio" },
+						{ id: 10, city: "Salt Lake City", state: "Utah" },
+						{ id: 11, city: "St. George", state: "Utah" }
+					];
 
 				});
 
