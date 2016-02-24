@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<ul>
+					<li ng-repeat-start="color in colors">
+						{{color}}
+						<button ng-click="toggleEdit($event)">Edit</button>
+					</li>
+					<li ng-repeat-end ng-if="editMode">
+						<input ng-model="color">
+						<button ng-click="toggleEdit($event)">Edit</button>
+					</li>
+				</ul>
+
+				<div ng-repeat="color in colors" ng-controller="DataRowCtrl">
+					<div ng-if="!editMode">
+						{{color}}
+						<button ng-click="toggleEdit($event)">Edit</button>
+					</div>
+					<div ng-if="editMode">
+						<input ng-model="color">
+						<button ng-click="toggleEdit($event)">Edit</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("DataRowCtrl", function($scope) {
+
+					$scope.editMode = false;
+
+					$scope.toggleEdit = function($event) {
+						$scope.editMode = !$scope.editMode;
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+
+					$scope.colors = ["red","green","blue","purple"];
+
+					$scope.toggleEdit = function($event) {
+
+						// var parentScope = angular.element($event.target.parentElement).scope();
+						// console.dir($event.target.parentElement);
+						// console.dir(parentScope);
+						// parentScope.editMode = !parentScope.editMode;
+
+						console.log("toggle edit clicked");
+						this.$parent.editMode = !this.$parent.editMode;
+						this.editMode = !this.editMode;
+					}
+
+
+				});
+
+		</script>
+	</body>
+
+</html>

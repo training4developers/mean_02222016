@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<script id="view-row" type="text/ng-template">
+				{{color}}
+				<button ng-click="toggleEdit()">Edit</button>
+			</script>
+			<script id="edit-row" type="text/ng-template">
+				<input ng-model="color">
+				<button ng-click="toggleEdit()">Edit</button>
+			</script>
+			<div ng-controller="MyCtrl">
+				<ul>
+					<li ng-repeat-start="color in colors"
+						ng-if="!editMode" ng-include="'view-row'"></li>
+					<li ng-repeat-end
+						ng-if="editMode" ng-include="'edit-row'"></li>
+				</ul>
+
+			</div>
+		</div>
+
+		<script>
+
+			"use strict";
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope) {
+
+					$scope.colors = ["red","green","blue","purple"];
+
+					$scope.toggleEdit = function($event) {
+						console.dir(this);
+						this.$parent.$parent.editMode = !this.$parent.$parent.editMode;
+					}
+
+				});
+
+		</script>
+	</body>
+
+</html>
