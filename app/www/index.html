@@ -46,8 +46,7 @@
 
 					$scope.editRow = function() {
 						$scope.editRowId = 	this.color.id;
-						$scope.editColor = angular.extend({}, this.color);
-						console.dir(this);
+						angular.extend($scope.editColor = {}, this.color);
 					};
 
 					$scope.saveRow = function() {
