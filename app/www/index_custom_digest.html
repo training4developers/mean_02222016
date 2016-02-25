@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<!-- <script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script> -->
+	</head>
+
+	<body>
+		<div>
+
+			Message: <input dfs-model="message"><br>
+			Message: <span dfs-bind="message"></span><br>
+			Message2: <input dfs-model="message2"><br>
+			Message2: <span dfs-bind="message2"></span><br>
+
+		</div>
+
+		<script>
+
+			var watches = [];
+
+			function watch(scope, propName, domFn) {
+
+				var lastValue = scope[propName];
+
+				watches.push(function() {
+					if (scope[propName] !== lastValue) {
+						domFn(scope[propName], lastValue, scope);
+						lastValue = scope[propName];
+						return true;
+					}
+					return false;
+				});
+			}
+
+			function digest() {
+
+				var anyChanges = false;
+
+				watches.forEach(function(watch) {
+					anyChanges = watch() || anyChanges;
+				});
+
+				if (anyChanges) {
+					digest();
+				}
+
+			}
+
+
+			var dfsScope = {
+				message: "Hola Mundo!"
+			};
+
+			// Compile
+
+			$("[dfs-model]").each(function(index, element) {
+
+				element = $(element);
+
+				// Link
+
+				element.on("keyup", function() {
+					dfsScope[element.attr("dfs-model")] = element.val();
+					digest();
+				});
+
+				watch(dfsScope, element.attr("dfs-model"), function(newValue) {
+					element.val(newValue);
+				});
+
+				// End Link
+
+			});
+
+			$("[dfs-bind]").each(function(index, element) {
+				element = $(element);
+
+				// Link
+
+				watch(dfsScope, element.attr("dfs-bind"), function(newValue) {
+					element.html(newValue);
+				});
+
+				// End Link
+
+			});
+
+			// End Compile
+
+
+
+
+
+		</script>
+	</body>
+
+</html>

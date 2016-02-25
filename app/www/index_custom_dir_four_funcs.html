@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir></div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function($compile) {
+
+					return {
+						// compile function
+						compile: function(tElement, tAttrs) {
+
+							tElement.append("<span>{{$id}} {{message}}</span>");
+
+							return {
+								pre: function() {
+
+								},
+								post: function(scope, element, attrs) {
+
+									var linkingFn = $compile("<span>{{$id}} {{message}}</span>");
+									var domElements = linkingFn(scope);
+
+									element.append(domElements);
+								}
+							};
+						}
+					};
+
+				})
+				// .directive("myDir", function($compile) {
+				//
+				// 	return {
+				// 		// compile function
+				// 		compile: function(tElement, tAttrs) {
+				//
+				// 			tElement.append("<span>{{$id}} {{message}}</span>");
+				//
+				// 			// post-link function
+				// 			return function(scope, element, attrs) {
+				//
+				// 				var linkingFn = $compile("<span>{{$id}} {{message}}</span>");
+				// 				var domElements = linkingFn(scope);
+				//
+				// 				element.append(domElements);
+				// 			};
+				// 		}
+				// 	};
+				//
+				// })
+				// .directive("myDir", function() {
+				//
+				// 	return {
+				// 		// post-link function
+				// 		link: function(scope, element, attrs) {
+				// 			element.html("Hello World!");
+				// 		}
+				// 	};
+				//
+				// })
+				// .directive("myDir", function() {
+				//
+				// 	// post-link function
+				// 	return function(scope, element, attrs) {
+				// 		element.html("Hello World!");
+				// 	};
+				//
+				// })
+				.controller("MyCtrl", function($scope, $document) {
+
+					$scope.message = "Hola Mundo!";
+
+					$scope.clickMe = function() {
+						$document.html('do whaterver');
+					}
+
+				});
+
+
+		</script>
+	</body>
+
+</html>

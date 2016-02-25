@@ -9,83 +9,26 @@
 	</head>
 
 	<body>
-
-		<h1>Hi!</h1>
-
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				<div my-dir></div>
-				<div dfs-score-color>{{minScore | minScoreLabel}}</div>
+				<!-- <div class="my-dir"></div> -->
+				<!-- directive: my-dir -->
 			</div>
 		</div>
-
-		<!-- <td style="color:green">725 (Good)</td> -->
 
 		<script>
 
 			angular.module("MyApp", [])
-				.filter("minScoreLabel", function() {
-
-					return function(value) {
-						if (value>=800) {
-							value += " (Excellent)";
-						} else if(value>=700) {
-							value += " (Good)";
-						} else if(value<500) {
-							value += " (Bad)";
-						} else if(value<600) {
-							value += " (Poor)";
-						} else {
-							value += " (Average)";
-						}
-
-						return value;
-					}
-
-				})
-				.directive("dfsScoreColor", function() {
-
-					return function(scope, element, attrs) {
-
-						var minScoreColor = "black";
-
-						if (scope.minScore>=800) {
-							minScoreColor = "green";
-							//scope.minScore += " (Excellent)";
-						} else if(scope.minScore>=700) {
-							minScoreColor = "blue";
-							//scope.minScore += " (Good)";
-						} else if(scope.minScore<500) {
-							minScoreColor = "red";
-							//scope.minScore += " (Bad)";
-						} else if(scope.minScore<600) {
-							minScoreColor = "yellow";
-							//scope.minScore += " (Poor)";
-						} else {
-							//scope.minScore += " (Average)";
-						}
-
-						element.css("color", minScoreColor);
-						element.css("font-weight", "bold");
-
-						console.dir(scope);
-
-					};
-
-				})
-
 				.directive("myDir", function() {
-
-					return function(scope, element, attrs) {
-						element.html("Hello World!");
-						element.css("color","red");
-						element.css("font-weight","bold");
+					return {
+						restrict: "EACM",
+						link: function(scope, element, attrs) {
+							console.dir(element);
+							element.after("<span>Hello World!</span>");
+						}
 					};
-
 				})
-				.controller("MyCtrl", function($scope) {
-
-					$scope.minScore = 750;
+				.controller("MyCtrl", function($scope, $document) {
 
 				});
 
