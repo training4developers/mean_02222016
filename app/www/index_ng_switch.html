@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/jquery/dist/jquery.js"></script>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<select ng-model="selectedCreditCardType"
+					ng-options="creditCardType.code as creditCardType.name for creditCardType in creditCardTypes">
+					<option value="">Select a Credit Card Type</option>
+				</select>
+
+				<div dynamic-switch on="selectedCreditCardType">
+					<div ng-repeat="creditCardType in creditCardTypes"
+						dynamic-switch-when="{{creditCardType.code}}">
+						{{creditCardType.tagLine}}
+					</div>
+					<div dynamic-switch-default>
+						Please select one, and it better be Discover!
+					</div>
+				</div>
+			</div>
+
+
+			<!-- <div ng-switch-when="DISC">
+				Discover Rocks You Are Amazing!
+			</div>
+			<div ng-switch-when="AMEX">
+				American Express is for people who do not qualify for Discover!
+			</div>
+			<div ng-switch-when="VISA">
+				Visa is for people who Discover rejected.
+			</div>
+			<div ng-switch-when="MAST">
+				Mastercard is for people who are priceless.
+			</div> -->
+
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("dynamicSwitch", function($compile) {
+
+					return {
+						controller: function($scope) {
+							this.addOption = function(optionValue, optionContent)	{
+								$scope.options.push({
+									optionValue: optionValue,
+									optionContent: optionContent
+								});
+							};
+
+							this.addDefaultOption = function(optionContent) {
+								$scope.defaultOption = {
+									optionContent: optionContent
+								};
+							}
+						},
+						compile: function() {
+							return {
+								pre: function(scope) {
+									scope.options = [];
+								},
+								post: function(scope, element) {
+
+									var tpl = "<div ng-switch on=\"" + element.attr("on") + "\">";
+
+									scope.options.forEach(function(option) {
+										tpl += "<div ng-switch-when=\"" + option.optionValue + "\">" +
+											option.optionContent + "</div>";
+									});
+
+									tpl += "</div>"
+
+									var linkingFn = $compile(tpl);
+									var domElements = linkingFn(scope);
+									element.empty();
+									//element.append(domElements);
+
+								}
+							}
+						}
+
+					}
+
+				})
+				.directive("dynamicSwitchWhen", function() {
+
+					return {
+						require: "^^dynamicSwitch",
+						link: function(scope, element, attrs, ctrl) {
+							ctrl.addOption(attrs.dynamicSwitchWhen, element[0].outerHTML);
+						}
+					}
+
+				})
+				.directive("dynamicSwitchDefault", function() {
+
+					return {
+						require: "^^dynamicSwitch",
+						link: function(scope, element, attrs, ctrl) {
+							ctrl.addDefaultOption(element[0].outerHTML);
+						}
+					}
+
+				})
+				.controller("MyCtrl", function($scope) {
+
+					$scope.selectedCreditCardType = "DISC";
+
+					$scope.creditCardTypes = [
+						{ code: "DISC", name: "Discover", tagLine: "Discover Rocks You Are Amazing!" },
+						{ code: "AMEX", name: "American Express", tagLine: "American Express is for people who do not qualify for Discover!" },
+						{ code: "VISA", name: "Visa", tagLine: "Mastercard is for people who are priceless." },
+						{ code: "MAST", name: "Mastercard", tagLine: "Mastercard is for people who are priceless." }
+					];
+
+				});
+
+		</script>
+	</body>
+
+</html>

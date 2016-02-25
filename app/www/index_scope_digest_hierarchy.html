@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<style>
+
+			div.ng-scope {
+				margin:5px;
+				padding:5px;
+				border: 2px solid red;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			RootScope: {{$id}}
+			<div ng-controller="MyCtrl">
+				Scope: {{$id}}
+				<div ng-controller="MyCtrl">
+					Scope: {{$id}}
+				</div>
+				<div ng-controller="MyCtrl">
+					Scope: {{$id}}
+				</div>
+			</div>
+			<div ng-controller="MyCtrl">
+				Scope: {{$id}}
+			</div>
+			<div ng-controller="MyCtrl">
+				Scope: {{$id}}
+				<div ng-controller="MyCtrl">
+					Scope: {{$id}}
+				</div>
+			</div>
+			<div ng-controller="MyCtrl">
+				Scope: {{$id}}
+			</div>
+
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+
+				.controller("MyCtrl", function($scope) {
+					$scope.$watch(function() {
+
+						console.log($scope.$id + " was digested");
+
+					});
+
+				})
+				.run(function($rootScope) {
+					console.dir($rootScope);
+				});
+
+		</script>
+	</body>
+
+</html>

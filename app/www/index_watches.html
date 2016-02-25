@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				Message: <input ng-model="message"><br>
+				First Name: <input ng-model="contact.firstName"><br>
+				Last Name: <input ng-model="contact.lastName"><br>
+			</div>
+
+			<ul>
+				<li ng-repeat="color in colors">{{color}}</li>
+			</ul>
+		</div>
+		<script>
+
+			function watchMessage(newValue, oldValue, scope) {
+
+				console.log("new value: " + newValue);
+				console.log("old value: " + oldValue);
+
+			}
+
+			function watchContact(newValues, oldValues, scope) {
+
+				console.log("new value: " + newValues.join(","));
+				console.log("old value: " + oldValues.join(","));
+
+			}
+
+			angular.module("MyApp", [])
+				.controller("MyCtrl", function($scope, $timeout) {
+
+					//$scope.$watch("message", watchMessage);
+
+					// $scope.$watchGroup([
+					// 	"contact.firstName",
+					// 	"contact.lastName"
+					// ], watchContact);
+					//
+					// $scope.colors = ["red","blue","green"];
+					//
+					// $scope.$watchCollection("colors", function(newList, oldList, scope) {
+					//
+					// 	console.log("new list: " + newList);
+					// 	console.log("old list: " + oldList);
+					// });
+					//
+					// $timeout(function() {
+					// 	$scope.colors.push("hot pink");
+					// },1000);
+
+					$scope.$watch(function() {
+						console.log("comparison function");
+						console.dir(arguments);
+					}, function() {
+						console.log("watch function");
+						console.dir(arguments);
+					})
+
+					// var items = [1,2,3,4];
+					// console.log(items.toString());
+					// console.log(items.join(","));
+
+				});
+
+		</script>
+	</body>
+
+</html>
