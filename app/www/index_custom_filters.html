@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message | dfsUpperCase}}
+
+				Sort: <input ng-model="sortNumbers" type="checkbox">
+
+				<ul>
+					<li ng-repeat="item in items | dfsUnique:sortNumbers">{{item}}</li>
+				</ul>
+			</div>
+		</div>
+		<script>
+
+			angular.module("MyApp", [])
+				.filter("dfsUpperCase", function() {
+
+					return function(value) {
+						return String(value).toUpperCase();
+					};
+
+				})
+				.filter("dfsUnique", function() {
+
+					return function(listOfValues, sortResults) {
+
+						var uniqueListOfValues = _.uniq(listOfValues);
+
+						if (sortResults) {
+							return uniqueListOfValues.sort();
+						} else {
+							return uniqueListOfValues;
+						}
+
+					}
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+
+					$scope.items = [1,2,4,2,5,3,6,7,6,1];
+
+					//console.dir(_.uniq(items));
+
+				});
+
+		</script>
+	</body>
+
+</html>

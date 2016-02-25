@@ -17,9 +17,9 @@
 					<option value="">Select a Credit Card Type</option>
 				</select>
 
-				<div dynamic-switch on="selectedCreditCardType">
-					<div ng-repeat="creditCardType in creditCardTypes"
-						dynamic-switch-when="{{creditCardType.code}}">
+				<div dynamic-switch="creditCardType in creditCardTypes"
+					on="selectedCreditCardType">
+					<div dynamic-switch-when>
 						{{creditCardType.tagLine}}
 					</div>
 					<div dynamic-switch-default>
