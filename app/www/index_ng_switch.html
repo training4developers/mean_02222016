@@ -17,7 +17,7 @@
 					<option value="">Select a Credit Card Type</option>
 				</select>
 
-				<div dynamic-switch="creditCardType in creditCardTypes"
+				<div dynamic-switch="code for creditCardType in creditCardTypes"
 					on="selectedCreditCardType">
 					<div dynamic-switch-when>
 						{{creditCardType.tagLine}}
@@ -50,20 +50,24 @@
 
 					return {
 						controller: function($scope) {
-							this.addOption = function(optionValue, optionContent)	{
-								$scope.options.push({
-									optionValue: optionValue,
-									optionContent: optionContent
-								});
+
+							this.setOptionTemplate = function(optionTemplate)	{
+								$scope.optionTemplate = optionTemplate;
 							};
 
-							this.addDefaultOption = function(optionContent) {
-								$scope.defaultOption = {
-									optionContent: optionContent
-								};
-							}
+							this.setDefaultOptionTemplate = function(defaultOptionTemplate) {
+								$scope.defaultOptionTemplate = defaultOptionTemplate;
+							};
+
 						},
-						compile: function() {
+						compile: function(tElement, tAttrs) {
+
+							var
+								tokens = tAttrs.dynamicSwitch.split(" "),
+								collectionName = tokens[4],
+								itemName = tokens[2],
+								itemPropName = tokens[0];
+
 							return {
 								pre: function(scope) {
 									scope.options = [];
@@ -72,17 +76,21 @@
 
 									var tpl = "<div ng-switch on=\"" + element.attr("on") + "\">";
 
-									scope.options.forEach(function(option) {
-										tpl += "<div ng-switch-when=\"" + option.optionValue + "\">" +
-											option.optionContent + "</div>";
+									console.log(scope.optionTemplate);
+
+									scope[collectionName].forEach(function(item) {
+										tpl += "<div ng-switch-when=\"" + item[itemPropName] + "\">" +
+											scope.optionTemplate + "</div>";
 									});
+
+									tpl += "<div ng-switch-default>" + scope.defaultOptionTemplate + "</div>";
 
 									tpl += "</div>"
 
 									var linkingFn = $compile(tpl);
 									var domElements = linkingFn(scope);
 									element.empty();
-									//element.append(domElements);
+									element.append(domElements);
 
 								}
 							}
@@ -96,7 +104,7 @@
 					return {
 						require: "^^dynamicSwitch",
 						link: function(scope, element, attrs, ctrl) {
-							ctrl.addOption(attrs.dynamicSwitchWhen, element[0].outerHTML);
+							ctrl.setOptionTemplate(element.html());
 						}
 					}
 
@@ -106,7 +114,7 @@
 					return {
 						require: "^^dynamicSwitch",
 						link: function(scope, element, attrs, ctrl) {
-							ctrl.addDefaultOption(element[0].outerHTML);
+							ctrl.setDefaultOptionTemplate(element.html());
 						}
 					}
 

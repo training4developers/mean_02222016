@@ -9,22 +9,86 @@
 	</head>
 
 	<body>
+
+		<h1>Hi!</h1>
+
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				{{message}}
+				<div my-dir></div>
+				<div dfs-score-color>{{minScore | minScoreLabel}}</div>
 			</div>
 		</div>
+
+		<!-- <td style="color:green">725 (Good)</td> -->
+
 		<script>
 
-			myCtrl.$inject = ["$log", "$scope"];
-
-			function myCtrl($log, $scope) {
-				$scope.message = "Hello World!";
-				$log.log($scope.message);
-			}
-
 			angular.module("MyApp", [])
-				.controller("MyCtrl", myCtrl);
+				.filter("minScoreLabel", function() {
+
+					return function(value) {
+						if (value>=800) {
+							value += " (Excellent)";
+						} else if(value>=700) {
+							value += " (Good)";
+						} else if(value<500) {
+							value += " (Bad)";
+						} else if(value<600) {
+							value += " (Poor)";
+						} else {
+							value += " (Average)";
+						}
+
+						return value;
+					}
+
+				})
+				.directive("dfsScoreColor", function() {
+
+					return function(scope, element, attrs) {
+
+						var minScoreColor = "black";
+
+						if (scope.minScore>=800) {
+							minScoreColor = "green";
+							//scope.minScore += " (Excellent)";
+						} else if(scope.minScore>=700) {
+							minScoreColor = "blue";
+							//scope.minScore += " (Good)";
+						} else if(scope.minScore<500) {
+							minScoreColor = "red";
+							//scope.minScore += " (Bad)";
+						} else if(scope.minScore<600) {
+							minScoreColor = "yellow";
+							//scope.minScore += " (Poor)";
+						} else {
+							//scope.minScore += " (Average)";
+						}
+
+						element.css("color", minScoreColor);
+						element.css("font-weight", "bold");
+
+						console.dir(scope);
+
+					};
+
+				})
+
+				.directive("myDir", function() {
+
+					return function(scope, element, attrs) {
+						element.html("Hello World!");
+						element.css("color","red");
+						element.css("font-weight","bold");
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+
+					$scope.minScore = 750;
+
+				});
+
 
 		</script>
 	</body>
