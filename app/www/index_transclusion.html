@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir>
+					<h1>{{message}}</h1>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+					return {
+						transclude: true,
+						//template: "MyDir Template! <div ng-transclude></div><div ng-transclude></div><div ng-transclude></div><div ng-transclude></div><div ng-transclude></div><div ng-transclude></div>",
+						link: function(scope, element, attrs, ctrl, transclude) {
+
+							transclude(function(clone) {
+								element.append(clone);
+							});
+							transclude(function(clone) {
+								element.append(clone);
+							});
+							transclude(function(clone) {
+								element.append(clone);
+							});
+						}
+					};
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+
+		</script>
+	</body>
+
+</html>

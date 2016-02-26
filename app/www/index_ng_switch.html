@@ -17,108 +17,29 @@
 					<option value="">Select a Credit Card Type</option>
 				</select>
 
-				<div dynamic-switch="code for creditCardType in creditCardTypes"
-					on="selectedCreditCardType">
-					<div dynamic-switch-when>
-						{{creditCardType.tagLine}}
+				<div ng-switch on="selectedCreditCardType">
+					<div ng-switch-when="DISC">
+						Discover Rocks You Are Amazing!
 					</div>
-					<div dynamic-switch-default>
-						Please select one, and it better be Discover!
+					<div ng-switch-when="AMEX">
+						American Express is for people who do not qualify for Discover!
+					</div>
+					<div ng-switch-when="VISA">
+						Visa is for people who Discover rejected.
+					</div>
+					<div ng-switch-when="MAST">
+						Mastercard is for people who are priceless.
 					</div>
 				</div>
 			</div>
 
 
-			<!-- <div ng-switch-when="DISC">
-				Discover Rocks You Are Amazing!
-			</div>
-			<div ng-switch-when="AMEX">
-				American Express is for people who do not qualify for Discover!
-			</div>
-			<div ng-switch-when="VISA">
-				Visa is for people who Discover rejected.
-			</div>
-			<div ng-switch-when="MAST">
-				Mastercard is for people who are priceless.
-			</div> -->
+
 
 		</div>
 		<script>
 
 			angular.module("MyApp", [])
-				.directive("dynamicSwitch", function($compile) {
-
-					return {
-						controller: function($scope) {
-
-							this.setOptionTemplate = function(optionTemplate)	{
-								$scope.optionTemplate = optionTemplate;
-							};
-
-							this.setDefaultOptionTemplate = function(defaultOptionTemplate) {
-								$scope.defaultOptionTemplate = defaultOptionTemplate;
-							};
-
-						},
-						compile: function(tElement, tAttrs) {
-
-							var
-								tokens = tAttrs.dynamicSwitch.split(" "),
-								collectionName = tokens[4],
-								itemName = tokens[2],
-								itemPropName = tokens[0];
-
-							return {
-								pre: function(scope) {
-									scope.options = [];
-								},
-								post: function(scope, element) {
-
-									var tpl = "<div ng-switch on=\"" + element.attr("on") + "\">";
-
-									console.log(scope.optionTemplate);
-
-									scope[collectionName].forEach(function(item) {
-										tpl += "<div ng-switch-when=\"" + item[itemPropName] + "\">" +
-											scope.optionTemplate + "</div>";
-									});
-
-									tpl += "<div ng-switch-default>" + scope.defaultOptionTemplate + "</div>";
-
-									tpl += "</div>"
-
-									var linkingFn = $compile(tpl);
-									var domElements = linkingFn(scope);
-									element.empty();
-									element.append(domElements);
-
-								}
-							}
-						}
-
-					}
-
-				})
-				.directive("dynamicSwitchWhen", function() {
-
-					return {
-						require: "^^dynamicSwitch",
-						link: function(scope, element, attrs, ctrl) {
-							ctrl.setOptionTemplate(element.html());
-						}
-					}
-
-				})
-				.directive("dynamicSwitchDefault", function() {
-
-					return {
-						require: "^^dynamicSwitch",
-						link: function(scope, element, attrs, ctrl) {
-							ctrl.setDefaultOptionTemplate(element.html());
-						}
-					}
-
-				})
 				.controller("MyCtrl", function($scope) {
 
 					$scope.selectedCreditCardType = "DISC";
