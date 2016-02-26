@@ -11,41 +11,46 @@
 	<body>
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				<div my-dir></div>
+				Outside Dir: {{outsideMessage}} {{$id}}
+				<div my-dir msg="outsideMessage" uppercase-msg="{{outsideMessage | uppercase}}"
+					func="doSomething()"></div>
 			</div>
 		</div>
 
 		<script>
 
+
 			angular.module("MyApp", [])
-				.directive("myDir", ["$compile", "$templateRequest",
-						function($compile, $templateRequest) {
+				.directive("myDir", function() {
 
+					return {
+						scope: {
+							//insideMessage: "=msg"
+							msg: "=",
+							uppercaseMsg: "@",
+							func: "&"
+						},
+						template: "Inside Directive: {{uppercaseMsg}} {{$id}} <input ng-model='msg'>",
+						link: function(scope) {
+							console.dir(scope);
 
-						function loadTemplate(templateUrl, rootElement, scope) {
-							$templateRequest(templateUrl).then(function(templateContent) {
-								var linkingFn = $compile(templateContent);
-								var domElements = linkingFn(scope);
-								rootElement.append(domElements);
-							});
+							scope.func();
 
 						}
+					};
 
-						return {
-							dfsTemplateUrl: "tpls/demo.tpl.html",
-							compile: function() {
-
-								var templateUrl = this.dfsTemplateUrl;
-
-								return function(scope, element, attrs) {
-									loadTemplate(templateUrl, element, scope);
-								};
-
-							}
-						};
-					}])
+				})
 				.controller("MyCtrl", function($scope) {
-					$scope.message = "Hi Class!";
+
+					$scope.outsideMessage = "Hi Everyone!";
+
+					$scope.colors = ["red","green","black","white","saffron","blue"];
+
+					$scope.doSomething = function() {
+						console.log("did it!");
+					};
+
+
 				});
 
 

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<ul dfs-repeat="color in colors | orderBy:'toString()'">
+					<li>{{color}}</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<script>
+
+
+			angular.module("MyApp", [])
+				.directive("dfsRepeat", function() {
+
+					return {
+						transclude: true,
+						compile: function(tElement, tAttrs) {
+
+							console.dir(tAttrs);
+
+							var tokens = tAttrs.dfsRepeat.split(" ");
+							var itemName = tokens[0];
+							var collectionName = tokens[2];
+							var collectionExpr = tokens.splice(2).join(" ");
+							console.log(collectionExpr);
+
+							return function(scope, element, attrs, ctrl, transclude) {
+
+								var childScopes = [];
+
+								scope.$on("$destroy", function() {
+									childScopes.forEach(function(childScope) {
+										childScope.$destroy();
+									});
+								});
+
+								scope.$watchCollection(collectionName, function(newCollection, oldCollection, scope) {
+
+									element.empty();
+
+									childScopes.forEach(function(childScope) {
+										childScope.$destroy();
+									});
+									childScopes = [];
+
+									scope.$eval(collectionExpr).forEach(function(item) {
+
+										var childScope = scope.$new();
+
+										childScope[itemName] = item;
+
+										transclude(childScope, function(clone) {
+											element.append(clone);
+										});
+
+										childScopes.push(childScope);
+
+									});
+
+								});
+
+							};
+
+						}
+					}
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.colors = ["red","green","black","white","saffron","blue"];
+
+					$timeout(function() {
+						$scope.colors.push("hot pink");
+						console.dir($scope.colors);
+					}, 2000);
+				});
+
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+
+				<ul>
+					<li>First</li>
+					<li dfs-repeat="color in colors | orderBy:'toString()'">{{color}}</li>
+					<li>Last</li>
+				</ul>
+
+			</div>
+		</div>
+
+		<script>
+
+
+			angular.module("MyApp", [])
+				.directive("dfsRepeat", function() {
+
+					return {
+						transclude: 'element',
+						compile: function(tElement, tAttrs) {
+
+							var tokens = tAttrs.dfsRepeat.split(" ");
+							var itemName = tokens[0];
+							var collectionName = tokens[2];
+							var collectionExpr = tokens.splice(2).join(" ");
+
+							return function(scope, element, attrs, ctrl, transclude) {
+
+								var
+									elements = [];
+
+								scope.$on("$destroy", function() {
+									elements.forEach(function(element) {
+										angular.element(element).scope().$destroy();
+									});
+								});
+
+								scope.$watchCollection(collectionName, function(newCollection, oldCollection, scope) {
+
+									elements.forEach(function(element) {
+										angular.element(element).scope().$destroy();
+										element.remove();
+									});
+									elements = [];
+									lastElement = element;
+
+									scope.$eval(collectionExpr).forEach(function(item) {
+
+										var childScope = scope.$new();
+										childScope[itemName] = item;
+
+										transclude(childScope, function(clone) {
+											lastElement.after(clone);
+											elements.push(clone);
+											lastElement = clone;
+										});
+									});
+
+								});
+
+							};
+
+						}
+					}
+
+				})
+				.controller("MyCtrl", function($scope, $timeout) {
+					$scope.colors = ["red","green","black","white","saffron","blue"];
+
+					$timeout(function() {
+						$scope.colors.push("hot pink");
+						console.dir($scope.colors);
+					}, 2000);
+				});
+
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir></div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", ["$compile", "$templateRequest",
+						function($compile, $templateRequest) {
+
+
+						function loadTemplate(templateUrl, rootElement, scope) {
+							$templateRequest(templateUrl).then(function(templateContent) {
+								var linkingFn = $compile(templateContent);
+								var domElements = linkingFn(scope);
+								rootElement.append(domElements);
+							});
+
+						}
+
+						return {
+							dfsTemplateUrl: "tpls/demo.tpl.html",
+							compile: function() {
+
+								var templateUrl = this.dfsTemplateUrl;
+
+								return function(scope, element, attrs) {
+									loadTemplate(templateUrl, element, scope);
+								};
+
+							}
+						};
+					}])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+
+		</script>
+	</body>
+
+</html>

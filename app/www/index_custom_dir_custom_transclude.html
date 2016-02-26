@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<!-- <div id="test"></div> -->
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div my-dir>
+					<h1>{{message}}</h1>
+				</div>
+			</div>
+		</div>
+
+		<script>
+
+
+			//document.getElementById("test").innerText = "<h1>Hi Chicago!</h1>";
+
+			angular.module("MyApp", [])
+				.directive("myDir", ["$compile", "$templateRequest",
+						function($compile, $templateRequest) {
+
+						return {
+							compile: function(tElement, tAttrs) {
+
+								var tpl = tElement[0].innerHTML;
+
+								// console.dir(tElement[0].innerHTML);
+								// console.dir(tElement[0].outerHTML);
+								//
+								// console.log(tElement.text());
+
+								tElement.empty();
+
+								return function(scope, element, attrs) {
+
+									function transclude(cloneFn) {
+										var linkingFn = $compile(tpl);
+										var domElements = linkingFn(scope);
+										cloneFn(domElements);
+									}
+
+									transclude(function(clone) {
+										element.append(clone);
+									});
+									transclude(function(clone) {
+										element.append(clone);
+									});
+									transclude(function(clone) {
+										element.append(clone);
+									});
+								}
+
+							}
+						};
+					}])
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+
+		</script>
+	</body>
+
+</html>
