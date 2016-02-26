@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/lodash/dist/lodash.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<!-- <div class="my-dir"></div> -->
+				<!-- directive: my-dir -->
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("myDir", function() {
+					return {
+						restrict: "EACM",
+						link: function(scope, element, attrs) {
+							console.dir(element);
+							element.after("<span>Hello World!</span>");
+						}
+					};
+				})
+				.controller("MyCtrl", function($scope, $document) {
+
+				});
+
+
+		</script>
+	</body>
+
+</html>

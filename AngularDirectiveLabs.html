@@ -1,0 +1,1122 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+    Angular.js Exercises
+  </title>
+  <link href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/styles/github.min.css" rel="stylesheet"/>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.1/highlight.min.js">
+  </script>
+  <script>
+   hljs.initHighlightingOnLoad();
+  </script>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+  </script>
+  <script type="text/javascript">
+   MathJax.Hub.Config({"showProcessingMessages" : false,"messageStyle" : "none","tex2jax": { inlineMath: [ [ "$", "$" ] ] }});
+  </script>
+  <style type="text/css">
+   body {
+ font-size:12pt;
+ font-family:arial;
+ line-height:16pt;
+}
+
+code {
+ font-family:monospace;
+ font-size:12pt;
+ line-height:14pt;
+ border:1px solid gray;
+ padding:3px;
+ margin: 3px;
+}
+  </style>
+ </head>
+ <body>
+  <h1 id="angularjs-exercises">
+   Angular.js Exercises
+  </h1>
+  <h2 id="custom-directive-exercises">
+   Custom Directive Exercises
+  </h2>
+  <p>
+   The following exercises will help you explore how to create custom Angular.js directives.  The exercises will explore the following concepts:
+  </p>
+  <ol>
+   <li>
+    Restricting the type of marker with which a directive can be applied.
+   </li>
+   <li>
+    Using inline and external templates with a directive.
+   </li>
+   <li>
+    Transcluding the content of the element on which the directive is applied.
+   </li>
+   <li>
+    Using the compile service to add new directives to link function’s element object.
+   </li>
+   <li>
+    Isolating a directive’s scope to maximize re-usability.
+   </li>
+   <li>
+    Creating a custom validator and exploring how to use other directives’ controllers.
+   </li>
+   <li>
+    Explore directive priority and gain deeper understanding of the terminal option.
+   </li>
+   <li>
+    Setting up observes and interacting with a directive’s attribute object in the link function.
+   </li>
+  </ol>
+  <h3 id="exercise-setup">
+   Exercise Setup
+  </h3>
+  <p>
+   For each exercise a new HTML file will need to be created. This can be done one of two ways. First, a new HTML file can be created with a script reference to Angular.js in the content of the
+   <strong>
+    HEAD
+   </strong>
+   element and the following code added to the content of the
+   <strong>
+    BODY
+   </strong>
+   element.
+  </p>
+  <pre><code class="html">&lt;div ng-app="App"&gt;
+    &lt;div ng-controller="Ctrl"&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+&lt;script&gt;
+
+    angular.module("App", [])
+        .controller("Ctrl", function() {
+
+        });
+
+&lt;/script&gt;
+</code></pre>
+  <p>
+   The exercises will use the above code as their starting structure. The second way to create a new file is to simply copy the file from a previous exercise and remove the code from the previous exercise, thereby, resetting it the original code as shown above.
+  </p>
+  <p>
+   If you are unsure how to add a script reference to the top of an HTML file in the content of the
+   <strong>
+    HEAD
+   </strong>
+   section, please ask the instructor.
+  </p>
+  <h3 id="exercise-restrict-option">
+   Exercise - Restrict Option
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-restrict.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Using HTML markup, create a new
+   <strong>
+    DIV
+   </strong>
+   element as a child element of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .  Add a
+   <strong>
+    class
+   </strong>
+   attribute to the
+   <strong>
+    DIV
+   </strong>
+   element, then add a class named
+   <strong>
+    restrict-exercise
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register a new directive for the class added in the previous step.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   In the directive registration function, return a directive definition object. Configure the
+   <strong>
+    link
+   </strong>
+   function to simply replace the element’s content with the value
+   <strong>
+    It worked!
+   </strong>
+   .
+   <em>
+    Hint
+   </em>
+   , remember the element passed into the link function is a jQuery object with an
+   <strong>
+    html
+   </strong>
+   function.
+  </p>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   Configure the
+   <strong>
+    restrict
+   </strong>
+   option to limit the marker of the directive to a class instead of an element or attribute.
+  </p>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. Are the DOM changes specified by the directive applied to web page?
+  </p>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   <br/>
+   Reconfigure the
+   <strong>
+    restrict
+   </strong>
+   option to limit the marker of the directive to an element but do not change the HTML. Reload the web page. Did the output of the web page change?
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   <br/>
+   In the HTML markup, reapply the directive marker as an element. Reload the web page. Did the output of the web page change?
+  </p>
+  <h4 id="you-have-completed-the-exercise">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-template-option">
+   Exercise - Template Option
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-template.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Using HTML markup, create a new
+   <strong>
+    DIV
+   </strong>
+   element as a child element of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .  Add an attribute to the
+   <strong>
+    DIV
+   </strong>
+   element named
+   <strong>
+    template-exercise
+   </strong>
+   . Within the
+   <strong>
+    DIV
+   </strong>
+   element, add the following content.
+  </p>
+  <pre><code class="html">&lt;span&gt;{{originalMessage}}&lt;/span&gt;
+</code></pre>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register a new directive for the attribute created in the previous step.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   In the directive registration function, return the following directive definition object.
+  </p>
+  <pre><code class="javascript">{
+    link: function (scope, element, attrs) {
+        scope.originalMessage = "Original Content";
+        scope.newMessage = "New Content";
+    }
+}
+</code></pre>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? You will see
+   <strong>
+    Original Content
+   </strong>
+   displayed in the web browser.
+  </p>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   Modify the directive definition object by adding a template option to it. Configure the template option to use the following inline template.
+  </p>
+  <pre><code class="html">&lt;span&gt;{{newMessage}}&lt;/span&gt;
+</code></pre>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   Reload the web page, what does the web page look like now? What changed and why?
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   Copy the inline template content to an external file named
+   <strong>
+    template.html
+   </strong>
+   . Save the template file to the same folder as the web page. Change the template option to load the template from an external file.
+   <em>
+    Hint
+   </em>
+   , you will need to change the name of the option itself as well.
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   Reload the web page, what does the web page look like now? What changed and why?
+  </p>
+  <h4 id="you-have-completed-the-exercise_1">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-transclude-option">
+   Exercise - Transclude Option
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-transclude.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Using HTML markup, create a new
+   <strong>
+    DIV
+   </strong>
+   element as a child element of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .  Add an attribute to the
+   <strong>
+    DIV
+   </strong>
+   element named
+   <strong>
+    transclude-exercise
+   </strong>
+   . Within the
+   <strong>
+    DIV
+   </strong>
+   element, add the following content.
+  </p>
+  <pre><code class="html">&lt;span&gt;{{originalMessage}}&lt;/span&gt;
+</code></pre>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register a new directive for the attribute created in the previous step.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   In the directive registration function, return the following directive definition object.
+  </p>
+  <pre><code class="javascript">{
+    template: "&lt;span&gt;{{newMessage}}&lt;/span&gt;",
+    link: function (scope, element, attrs) {
+        scope.originalMessage = "Original Content";
+        scope.newMessage = "New Content";
+    }
+}
+</code></pre>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? Observe how the message
+   <strong>
+    Original Content
+   </strong>
+   has been replaced with the template content.
+  </p>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   To retrieve and use the original content, the original content must be transcluded.  This can be accomplish using either the ngTransclude directive or the transclude function available in the link function.  Add a
+   <strong>
+    DIV
+   </strong>
+   element, with the ngTransclude directive applied, to the template.
+  </p>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   Reload the web page, what does the web page look like now? What changed and why?  The original content will now appear in the content of the
+   <strong>
+    DIV
+   </strong>
+   element you added to the template.
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   Remove the
+   <strong>
+    DIV
+   </strong>
+   and ngTransclude directive from the template. Modify the link function to add a named parameter for the transclude function.  Name the parameter
+   <strong>
+    transclude
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 9.
+   </strong>
+   Call the transclude function, and pass in a callback function to add the cloned transcluded content as a child of the DIV element on which the transcludeExercise directive is applied.
+  </p>
+  <p>
+   <strong>
+    Step 10.
+   </strong>
+   Reload the web page, what does the web page look like now? What changed and why?
+  </p>
+  <p>
+   <strong>
+    Challenge:
+   </strong>
+   Transclude the content many times, adding it to the DOM each time.  What is the output and why?
+  </p>
+  <h4 id="you-have-completed-the-exercise_2">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-compile-service">
+   Exercise - Compile Service
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-compile.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Using HTML markup, create a new
+   <strong>
+    DIV
+   </strong>
+   element as a child element of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .  Add an attribute to the
+   <strong>
+    DIV
+   </strong>
+   element named
+   <strong>
+    compile-exercise
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register a new directive for the attribute created in the previous step.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   In the directive registration function, return the following directive definition object.
+  </p>
+  <pre><code class="javascript">{
+    link: function (scope, element, attrs) {
+
+        var tpl = "&lt;span&gt;{{message}}&lt;/span&gt;";
+
+        scope.message = "It worked!";
+
+        element.html(tpl);
+    }
+}
+</code></pre>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? Observe how the message template variable has not been replaced with the scope value.  Why did this happen?
+  </p>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   Using the compile service, compile the value of the
+   <strong>
+    tpl
+   </strong>
+   variable to produce a linking function.
+  </p>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   Pass the scope into the linking function, then add the resulting DOM element to the DOM.
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   Reload the web page, what does the web page look like now? What changed and why?
+  </p>
+  <h4 id="you-have-completed-the-exercise_3">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-isolated-scope">
+   Exercise - Isolated Scope
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-isolated.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Add the following HTML to the content area of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .
+  </p>
+  <pre><code class="html">Current Value: {{currentValue}}
+
+&lt;button simple-click="increment()"&gt;
+    Increment
+&lt;/button&gt;
+</code></pre>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register the
+   <strong>
+    simpleClick
+   </strong>
+   directive.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   Configure the
+   <strong>
+    simpleClick
+   </strong>
+   directive to use an
+   <strong>
+    isolated scope
+   </strong>
+   . Allow a function call to be assigned to the directive’s attribute marker.  The name of the scope property to which the function is assigned is named
+   <strong>
+    clickFn
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   Add a link function to the
+   <strong>
+    simpleClick
+   </strong>
+   directive, then add the following code to the link function.
+  </p>
+  <pre><code class="javascript">element.on("click", function(e) {
+
+    scope.$apply(function() {
+        scope.clickFn(e);
+    });
+
+});
+</code></pre>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   Initialize the
+   <strong>
+    Ctrl
+   </strong>
+   scope by adding the following code to the
+   <strong>
+    Ctrl
+   </strong>
+   controller function.
+  </p>
+  <pre><code class="javascript">$scope.currentValue = 0;
+
+$scope.increment = function() {
+    $scope.currentValue++;
+};
+</code></pre>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? Click the button and observe how the current value incremented. Why did this happen?
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   In the
+   <strong>
+    on
+   </strong>
+   click event handler, remove the call to
+   <strong>
+    apply
+   </strong>
+   . Reload the page, then click the button. Is the current value increase displayed in the UI? Why is the updated current value not displayed in the UI? What is the role of the apply function?
+  </p>
+  <h4 id="you-have-completed-the-exercise_4">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-ngmodel-require-option">
+   Exercise - ngModel &amp; Require Option
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-require.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Add the following HTML to the content area of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .
+  </p>
+  <pre><code class="html">&lt;style&gt;
+    input.ng-invalid { border: 3px solid red; }
+&lt;/style&gt;
+&lt;form name="contactForm"&gt;
+    &lt;input ng-model="person.firstName" name="personFirstName" simple-required&gt;
+&lt;/form&gt;
+</code></pre>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register the
+   <strong>
+    simpleRequired
+   </strong>
+   directive.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   In the
+   <strong>
+    simpleRequired
+   </strong>
+   directive registration function, return the following directive definition object.
+  </p>
+  <pre><code class="javascript">{
+    // To Do 1. add require option here
+    link: function(scope, element, attrs, ctrl) {
+
+        function validate(value) {
+            var isValid = value != null &amp;&amp; String(value).length &gt; 0;
+            // To Do 2. add code to set validity here
+            return value;
+        }
+
+        // To Do 3. add code to update format and parse arrays here
+    }
+}
+</code></pre>
+  <p>
+   Review the code, and fill in the code lines where there are
+   <strong>
+    To Do
+   </strong>
+   comments. If you are not familiar with ngModel’s controller properties, please ask the instructor for help.
+  </p>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   Initialize the
+   <strong>
+    Ctrl
+   </strong>
+   scope by adding the following code to the
+   <strong>
+    Ctrl
+   </strong>
+   controller function.
+  </p>
+  <pre><code class="javascript">$scope.person = {
+    firstName: "Bob"
+};
+</code></pre>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? Delete the content of the input element. What happened? Why did this happen? Type new content into the input element. What happened and why?  Use the browser’s DOM inspector to observe the addition and removal of classes from the input element.
+  </p>
+  <h4 id="you-have-completed-the-exercise_5">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-priority-terminal-option">
+   Exercise - Priority &amp; Terminal Option
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-terminal.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Using HTML markup, create a new
+   <strong>
+    DIV
+   </strong>
+   element as a child element of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .  Add two attributes named
+   <strong>
+    simple-bold
+   </strong>
+   and
+   <strong>
+    simple-repeat
+   </strong>
+   . Assign the value of
+   <strong>
+    5
+   </strong>
+   to the
+   <strong>
+    simple-repeat
+   </strong>
+   attribute. In the content area of the
+   <strong>
+    DIV
+   </strong>
+   element, add the following template variable.
+  </p>
+  <pre><code class="html">{{message}}
+</code></pre>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Create a property named
+   <strong>
+    message
+   </strong>
+   on the
+   <strong>
+    Ctrl
+   </strong>
+   scope object. Assign the value
+   <strong>
+    Hello!
+   </strong>
+   to the message property.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   Using JavaScript code, register two new directives for the attributes created in the previous step.
+  </p>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   In the
+   <strong>
+    simpleBold
+   </strong>
+   directive registration function, return the following directive definition object.
+  </p>
+  <pre><code class="javascript">{
+    priority:50,
+    link: function(scope, element) {
+        console.log("simpleBold Link");
+        element.css("font-weight", "bold");
+    }
+}
+</code></pre>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   In the
+   <strong>
+    simpleRepeat
+   </strong>
+   directive registration function, return a directive definition object with its priority set to 100 and the terminal option set to true. Use the compile option to specify a compile function with two named parameters:
+   <strong>
+    tElement
+   </strong>
+   and
+   <strong>
+    tAttrs
+   </strong>
+   . From the compile function, return a link function with one named parameter
+   <strong>
+    scope
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   In the compile function, declare four variables named:
+   <strong>
+    that
+   </strong>
+   ,
+   <strong>
+    count
+   </strong>
+   ,
+   <strong>
+    tpl
+   </strong>
+   and
+   <strong>
+    parentElement
+   </strong>
+   . Assign the reference of
+   <strong>
+    this
+   </strong>
+   to the
+   <strong>
+    that
+   </strong>
+   variable. Parse the integer from the
+   <strong>
+    simple-repeat
+   </strong>
+   attribute value, then assign it to the
+   <strong>
+    count
+   </strong>
+   variable.  Assign the outer HTML value of tElement’s
+   <strong>
+    first
+   </strong>
+   DOM element to the
+   <strong>
+    tpl
+   </strong>
+   variable. Assign the reference of tElement’s parent element to the
+   <strong>
+    parentElement
+   </strong>
+   variable.
+  </p>
+  <p>
+   <strong>
+    Step 8.
+   </strong>
+   Remove all of
+   <strong>
+    parentElement’s
+   </strong>
+   child elements.
+  </p>
+  <p>
+   <strong>
+    Step 9.
+   </strong>
+   In the linking function, use the compile service to compile the HTML value in the
+   <strong>
+    tpl
+   </strong>
+   variable.  Only compile directives on the root element of the HTML whose priority is less than
+   <strong>
+    simpleRepeat’s
+   </strong>
+   priority. Finally, call the returned linking function, passing in a new child scope, then add the returned DOM element as a child element to the
+   <strong>
+    parentElement
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 10.
+   </strong>
+   Wrap the compile/linking code in the previous step in a loop structure so the
+   <strong>
+    simpleRepeat’s
+   </strong>
+   DOM element and its content are repeated the number of times specified in the
+   <strong>
+    count
+   </strong>
+   variable.
+  </p>
+  <p>
+   <strong>
+    Step 11.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? How many items are bolded?  Observe the console, how many times is the text
+   <strong>
+    simpleBold link
+   </strong>
+   outputted. Why did this happen?
+  </p>
+  <p>
+   <strong>
+    Step 12.
+   </strong>
+   Change the priority of the
+   <strong>
+    simpleBold
+   </strong>
+   directive from 50 to 500.  Reload the web page.  How many items are bolded now?  Why did this happen?  Observe the console, how many times is the text
+   <strong>
+    simpleBold link
+   </strong>
+   outputted.
+  </p>
+  <h4 id="you-have-completed-the-exercise_6">
+   You have completed the exercise!
+  </h4>
+  <h3 id="exercise-attributes-object-observes">
+   Exercise - Attributes Object &amp; Observes
+  </h3>
+  <p>
+   <strong>
+    Step 1.
+   </strong>
+   Using the instructions in the
+   <strong>
+    Exercise Setup
+   </strong>
+   section, create a new HTML file named
+   <strong>
+    custom-dir-observe.html
+   </strong>
+   .
+  </p>
+  <p>
+   <strong>
+    Step 2.
+   </strong>
+   Add the following HTML to the content area of the
+   <strong>
+    Ctrl DIV
+   </strong>
+   .
+  </p>
+  <pre><code class="html">Current Value: {{currentValue}}
+&lt;div observe-exercise="{{currentValue}}"&gt;&lt;/div&gt;
+</code></pre>
+  <p>
+   <strong>
+    Step 3.
+   </strong>
+   Using JavaScript code, register the
+   <strong>
+    observeExercise
+   </strong>
+   directive.
+  </p>
+  <p>
+   <strong>
+    Step 4.
+   </strong>
+   From the
+   <strong>
+    observeExercise
+   </strong>
+   directive registration, return the following directive definition object.
+  </p>
+  <pre><code class="javascript">{
+    template: "Observe Value: {{observeValue}}",
+    link: function(scope, element, attrs) {
+    }
+}
+</code></pre>
+  <p>
+   <strong>
+    Step 5.
+   </strong>
+   In the link function, setup an
+   <strong>
+    observe
+   </strong>
+   to observe the
+   <strong>
+    observe-exercise
+   </strong>
+   attribute to update the
+   <strong>
+    observeValue
+   </strong>
+   property on the scope.
+  </p>
+  <p>
+   <strong>
+    Step 6.
+   </strong>
+   Initialize the
+   <strong>
+    Ctrl
+   </strong>
+   scope by adding the following code to the
+   <strong>
+    Ctrl
+   </strong>
+   controller function. If you are not familiar with JavaScript promises or how promises are used with the interval and timeout services, ask the instructor for further information.
+  </p>
+  <pre><code class="javascript">$scope.currentValue = 0;
+
+var intervalPromise = $interval(function() {
+    $scope.currentValue++;
+}, 500);
+
+$timeout(function() {
+    $interval.cancel(intervalPromise);
+}, 5000);
+</code></pre>
+  <p>
+   The interval service will increment current value approximately every 500 milliseconds. The interval will continue until being canceled by the callback function passed into the $timeout service approximately 5 seconds later.
+  </p>
+  <p>
+   <strong>
+    Step 7.
+   </strong>
+   Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the web page look like? Why does the observe value increment? How are watches and observes different? How are they similar?
+  </p>
+  <h4 id="you-have-completed-the-exercise_7">
+   You have completed the exercise!
+  </h4>
+ </body>
+</html>
