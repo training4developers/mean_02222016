@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<input type="text" ng-model="message">
+				<div my-dir="Samip Rules!" id="fav-div" title="{{message}}"></div>
+			</div>
+		</div>
+
+		<script>
+
+
+
+			angular.module("MyApp", [])
+				.directive("myDir", function myDirDirective() {
+
+					function doClasses(attrs) {
+						attrs.$addClass("dfs-is-cool");
+						attrs.$removeClass("dfs-is-cool")
+					}
+
+					return {
+						link: function postLink(scope, element, attrs) {
+							console.dir(attrs);
+
+							doClasses(attrs);
+
+							console.log(attrs.$normalize("some-prop"));
+							attrs.$set("some-prop", "new value");
+
+							attrs.$observe("title", function(newValue) {
+								console.log(newValue);
+							});
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}<br>
+				<input ng-model="message" dfs-required>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.directive("dfsRequired", function() {
+
+					return {
+						require: "ngModel",
+						link: function(scope, element, attrs, ngModelCtrl) {
+
+							function validate(value) {
+
+								if (value == null || String(value).length === 0) {
+									ngModelCtrl.$setValidity("dfs-required", false);
+									return;
+								} else {
+									ngModelCtrl.$setValidity("dfs-required", true);
+									return value;
+								}
+
+							}
+
+							ngModelCtrl.$formatters.push(validate);
+							ngModelCtrl.$parsers.push(validate);
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+		</script>
+	</body>
+
+</html>

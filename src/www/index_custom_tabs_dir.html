@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/angular-sanitize/angular-sanitize.js"></script>
+		<style>
+
+			.tabs > ul {
+				list-style-type: none;
+				list-style-position: inside;
+				margin:0;
+				padding:0;
+				box-sizing: border-box;
+			}
+
+			.tabs > ul > li {
+				display:inline-block;
+				margin:0;
+				padding:2px;
+				border: solid 1px black;
+				box-sizing: border-box;
+			}
+
+			.tabs > ul > li.active {
+				border: solid 1px blue;
+			}
+
+			.tabs > div {
+				border: solid 1px blue;
+				margin:0;
+				padding:5px;
+				box-sizing: border-box;
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<tabs active-tab-id="tab2">
+					<tab tab-id="tab1" tab-caption="Tab 1"><h1>Tab 1 Content...</h1></tab>
+					<tab tab-id="tab2" tab-caption="Tab 2">Tab 2 Content...</tab>
+					<tab tab-id="tab3" tab-caption="Tab 3">Tab 3 Content...</tab>
+					<tab tab-id="tab4" tab-caption="Tab 4">Tab 4 Content...</tab>
+				</tabs>
+
+				<!-- <ul>
+					<li><a href="#">Tab 1</a></li>
+					<li><a href="#">Tab 2</a></li>
+					<li><a href="#">Tab 3</a></li>
+					<li><a href="#">Tab 4</a></li>
+				</ul>
+				<div>Tab 1 Content</div>
+				<div>Tab 2 Content</div>
+				<div>Tab 3 Content</div>
+				<div>Tab 4 Content</div> -->
+
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", ["ngSanitize"])
+				.config(function($provide) {
+
+					console.dir($provide);
+
+					$provide.decorator("tabDirective", function($delegate) {
+
+						var originalCompile = $delegate[0].compile;
+
+						$delegate[0].compile = function(tElement, tAttrs) {
+							var originalPostLink = originalCompile.call(this, tElement, tAttrs);
+							return function(scope, element, attrs, ctrl, transclude) {
+								originalPostLink.call(this, scope, element, attrs, ctrl, transclude);
+								console.log("added tabid: " + scope.gotHere);
+							};
+						};
+
+						return $delegate;
+
+					});
+
+				})
+				.directive("tabs", function($compile) {
+
+					return {
+						controller: function($scope, $attrs) {
+							this.addTab = function(tabId, tabCaption, tabContent) {
+								$scope.tabs.push({
+									tabId: tabId,
+									tabCaption: tabCaption,
+									tabContent: tabContent
+								});
+							};
+						},
+						compile: function(tElement, tAttrs) {
+
+							return {
+								pre: function(scope, element, attrs) {
+									scope.tabs = [];
+									scope.activeTabId = attrs.activeTabId;
+
+									scope.activateTab = function(tabId) {
+										scope.activeTabId = tabId;
+									};
+								},
+								post: function(scope, element, attrs) {
+									var tpl = "<div class='tabs'><ul>" +
+										"<li ng-repeat='tab in tabs' ng-class='{active:tab.tabId === activeTabId}'>" +
+										"<a ng-click='activateTab(tab.tabId)'>{{tab.tabCaption}}</a></li></ul>";
+									tpl += "<div ng-repeat='tab in tabs' ng-if='activeTabId === tab.tabId' " +
+										"ng-bind-html='tab.tabContent'></div></div>";
+
+									var linkingFn = $compile(tpl);
+									var domElements = linkingFn(scope);
+									//element.empty().append(domElements);
+									element.replaceWith(domElements);
+								}
+							};
+
+						}
+					};
+
+				})
+				.directive("tab", function() {
+
+					return {
+						require: "^^tabs",
+						link: function(scope, element, attrs, ctrl) {
+							ctrl.addTab(attrs.tabId, attrs.tabCaption, element.html());
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+		</script>
+	</body>
+
+</html>

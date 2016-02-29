@@ -10,7 +10,9 @@
 	<body>
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				<div first-dir second-dir></div>
+				<div third-dir>
+					<div first-dir second-dir></div>
+				</div>
 			</div>
 		</div>
 
@@ -33,14 +35,25 @@
 					};
 
 				})
+				.directive("thirdDir", function() {
+					return {
+						controller: function() {
+							this.doSomething = function() {
+								console.log("did it 3!");
+							}
+						}
+					}
+				})
 				.directive("secondDir", function() {
 
 					return {
-						require: "firstDir",
+						require: ["?firstDir", "?^^thirdDir"],
 						link: function(scope, element, attrs, ctrl) {
+							if (ctrl[0]) {
+								ctrl[0].doSomething();
+							}
 
-							ctrl.doSomething();
-
+							ctrl[1].doSomething();
 						}
 
 
