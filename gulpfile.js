@@ -1,21 +1,32 @@
 "use strict";
 
 const
-	gulp = require("gulp");
+	gulp = require("gulp"),
+	templateCache = require('gulp-angular-templatecache');;
 
 gulp.task("copy", function() {
+	gulp.src(["src/**/*","!src/www/tpls/**/*"])
+		.pipe(gulp.dest("dist"))
+		.on("finish", function() {
+			require("fs").rmdir("dist/www/tpls", function(err) {
+				if (err) console.log(err.message);
+			});
+		});
+});
 
-	gulp.src("src/**/*")
-		.pipe(gulp.dest("dist"));
-
+gulp.task("templates", function() {
+	gulp.src("src/www/tpls/**/*")
+		.pipe(templateCache())
+		.pipe(gulp.dest("dist/www/js"))
 });
 
 gulp.task("server", function() {
 	require("./index.js");
 });
 
-gulp.task("default", ["copy"], function () {
+gulp.task("default", ["copy","templates"], function () {
 
-	gulp.watch(["src/**/*"], ["copy"]);
+	gulp.watch(["src/**/*","!src/www/tpls/**/*"], ["copy"]);
+	gulp.watch(["src/www/tpls/**/*"], ["templates"]);
 
 });
