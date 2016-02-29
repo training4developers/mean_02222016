@@ -3,18 +3,19 @@
 const
 	gulp = require("gulp");
 
-gulp.task("default", function() {
+gulp.task("copy", function() {
 
-	const
-		express = require("express");
+	gulp.src("src/**/*")
+		.pipe(gulp.dest("dist"));
 
-	let
-		app = express();
+});
 
-	app.use(express.static("app/www"));
+gulp.task("server", function() {
+	require("./index.js");
+});
 
-	app.listen(8080, function() {
-		console.log("web server listening on port 8080");
-	});
+gulp.task("default", ["copy"], function () {
+
+	gulp.watch(["src/**/*"], ["copy"]);
 
 });

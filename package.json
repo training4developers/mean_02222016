@@ -1,7 +1,7 @@
 {
   "name": "mean_02222016",
   "version": "1.0.0",
-  "description": "",
+  "description": "MEAN Class Files",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,14 +10,24 @@
     "type": "git",
     "url": "git+https://github.com/training4developers/mean_02222016.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Eric W. Greene",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/training4developers/mean_02222016/issues"
   },
   "homepage": "https://github.com/training4developers/mean_02222016#readme",
   "dependencies": {
-    "express": "^4.13.4"
+    "body-parser": "^1.15.0",
+    "cookie-parser": "^1.4.1",
+    "crypto": "0.0.3",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "mongoose": "^4.4.5",
+    "multer": "^1.1.0",
+    "passport": "^0.3.2",
+    "socket.io": "^1.4.5",
+    "validator": "^5.0.0",
+    "winston": "^2.2.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1"

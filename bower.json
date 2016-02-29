@@ -1,18 +1,18 @@
 {
   "name": "mean_02222016",
-  "description": "",
+  "description": "MEAN Class",
   "main": "index.js",
   "authors": [
     "Eric W. Greene <eric@ericwgreene.com>"
   ],
-  "license": "ISC",
+  "license": "MIT",
   "homepage": "https://github.com/training4developers/mean_02222016",
   "moduleType": [],
   "ignore": [
     "**/.*",
     "node_modules",
     "bower_components",
-    "app/www/libs",
+    "src/www/libs",
     "test",
     "tests"
   ],
