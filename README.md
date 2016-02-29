@@ -4,8 +4,9 @@
 2. Run the following commands from a terminal in the root folder of the cloned repository.
 
 ```bash
-$ npm install --global gulp
+$ npm install --global gulp bower
 $ npm install
+$ bower install
 ```
 
 4. Run gulp from the terminal, to create the application files.
@@ -14,7 +15,7 @@ $ npm install
 gulp
 ```
 
-5. Open a new terminal, and run the following gulp command to start the web server. The web server will run on port 8080 by default. If this port is not available on your machine, then edit the **config.json** file, and specify a port that will work.
+5. Open a new terminal, and run the following gulp command to start the web server. The web server will run on port 8080 by default. If this port is not available on your machine, then edit the **config.json** file in the project's root folder, and specify a port that will work. Also, you may need to tweak the database settings in the **config.json** file as well.
 
 ```bash
 gulp server
