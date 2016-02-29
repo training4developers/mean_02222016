@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="/socket.io/socket.io.js"></script>
+	</head>
+
+	<body>
+		Welcome!
+
+		<script>
+			var socket = io("http://localhost:8080");
+
+			socket.on("echo", function(message) {
+				console.log(message);
+			});
+
+			socket.emit("echo", "let's roll!");
+			console.log("message emitted!");
+
+		</script>
+	</body>
+
+</html>

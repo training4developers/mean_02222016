@@ -4,21 +4,48 @@
 
 	<head>
 		<title>Welcome to MEAN Stack Class!</title>
-		<script src="/socket.io/socket.io.js"></script>
+		<script src="libs/angular/angular.js"></script>
 	</head>
 
 	<body>
-		Welcome!
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}<br>
+				<input ng-model="message" dfs-required>
+			</div>
+		</div>
 
 		<script>
-			var socket = io("http://localhost:8080");
 
-			socket.on("echo", function(message) {
-				console.log(message);
-			});
+			angular.module("MyApp", [])
+				.directive("dfsRequired", function() {
 
-			socket.emit("echo", "let's roll!");
-			console.log("message emitted!");
+					return {
+						require: "ngModel",
+						link: function(scope, element, attrs, ngModelCtrl) {
+
+							function validate(value) {
+
+								if (value == null || String(value).length === 0) {
+									ngModelCtrl.$setValidity("dfs-required", false);
+									return;
+								} else {
+									ngModelCtrl.$setValidity("dfs-required", true);
+									return value;
+								}
+
+							}
+
+							ngModelCtrl.$formatters.push(validate);
+							ngModelCtrl.$parsers.push(validate);
+
+						}
+					};
+
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
 
 		</script>
 	</body>

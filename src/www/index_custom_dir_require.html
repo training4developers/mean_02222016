@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div first-dir second-dir></div>
+			</div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", [])
+				.controller("firstDirCtrl", ["$scope", "$element", "$attrs",
+					function($scope, $element, $attrs) {
+
+						this.doSomething = function() {
+							console.log("did it!");
+						};
+
+					}
+				])
+				.directive("firstDir", function() {
+
+					return {
+						controller: "firstDirCtrl"
+					};
+
+				})
+				.directive("secondDir", function() {
+
+					return {
+						require: "firstDir",
+						link: function(scope, element, attrs, ctrl) {
+
+							ctrl.doSomething();
+
+						}
+
+
+					}
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+				});
+
+		</script>
+	</body>
+
+</html>
