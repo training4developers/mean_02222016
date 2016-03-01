@@ -72,6 +72,7 @@ module.exports = function(options) {
 	app.use("/api", require("./routers/rest.js")("user-file"));
 	app.use("/api", require("./routers/rest.js")("credit-card"));
 	app.use("/api", require("./routers/rest.js")("account"));
+	app.use("/api", require("./routers/rest.js")("widget"));
 
 	app.use(/.*map$/, function(req, res) {
 		res.writeHead(404);

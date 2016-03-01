@@ -10,42 +10,34 @@
 	<body>
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
+				<table>
+					<tr ng-repeat="widget in widgets">
+						<td>{{widget.name}}</td>
+						<td>{{widget.description}}</td>
+						<td>{{widget.color}}</td>
+						<td>{{widget.size}}</td>
+						<td>{{widget.quantity}}</td>
+					</tr>
+				</table>
 
 			</div>
 		</div>
 		<script>
 
-			//console.log((function($q) { }).toString());
-
 			angular.module("MyApp", [])
-				.controller("MyCtrl", function($q) {
+				.factory("widgets", function($http) {
 
-					var p = new Promise(function(resolve, reject) {
+					return {
+						getAll: function() {
+							return $http.get("http://localhost:8080/api/widgets");
+						}
+					};
 
-						setTimeout(function() {
-							resolve("did it!");
-						}, 2000);
+				})
+				.controller("MyCtrl", function($scope, widgets) {
 
-					});
-
-					function doAsyncTask() {
-
-						var d = $q.defer();
-
-						setTimeout(function() {
-							d.resolve("did it!");
-						}, 2000);
-
-						return d.promise;
-
-					}
-
-					doAsyncTask();
-
-					console.log("waiting");
-
-					p.then(function(result) {
-						console.log(result);
+					widgets.getAll().then(function(results) {
+						$scope.widgets = results.data;
 					});
 
 

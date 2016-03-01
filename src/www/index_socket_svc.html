@@ -41,9 +41,11 @@
 					// 	echo.send($scope.message);
 					// };
 
-					echo($scope.message).then(function(result) {
-						console.log(result);
-					});
+ 					$scope.sendMessage = function() {
+						echo($scope.message).then(function(result) {
+							console.log(result);
+						});
+					};
 
 				});
 
