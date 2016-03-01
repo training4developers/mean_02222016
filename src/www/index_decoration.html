@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<span demo-dir>{{message | toUpperCase}}</span>
+			</div>
+			<div ng-controller="MyCtrl2">
+				<span demo-dir>{{message | toUpperCase}}</span>
+			</div>
+		</div>
+
+		<script>
+
+			// decorator - https://docs.angularjs.org/api/auto/service/$provide
+
+			// Links
+			// http://angular-tips.com/blog/2013/09/experiment-decorating-directives/
+			// http://briantford.com/blog/angular-hacking-core
+			// http://www.bennadel.com/blog/2926-overriding-directive-definitions-in-angularjs.htm
+			// https://github.com/angular/angular.js/issues/10149
+
+			angular.module("MyApp", [])
+				.directive("demoDir", function() {
+					return {
+						link: function() {
+							console.dir("demo dir link");
+						}
+					};
+				})
+				.filter("toUpperCase", function() {
+					return function(value) {
+						return String(value).toUpperCase();
+					};
+				})
+				.controller("MyCtrl", function($scope) {
+					$scope.message = "Hi Class!";
+					console.log("MyCtrl running");
+				})
+				.controller("MyCtrl2", function($scope) {
+					$scope.message = "Hi Class!";
+					console.log("MyCtrl2 running");
+				})
+				.decorator("demoDirDirective", function($delegate) {
+
+					console.dir($delegate);
+
+					var originalCompile = $delegate[0].compile;
+
+					// $delegate[0].controller = function() {
+					// 	console.log("demo dir controller");
+					// };
+
+					$delegate[0].controller = "demoDirCtrl";
+
+					$delegate[0].compile = function() {
+						console.log("demo dir compile");
+						return originalCompile.apply(this, Array.prototype.slice.call(arguments));
+					};
+
+					return $delegate;
+
+				})
+				.decorator("toUpperCaseFilter", function($delegate) {
+
+					var originalFilterFunction = $delegate;
+
+					$delegate = function() {
+						console.log("toUpperCase filter");
+						return originalFilterFunction.apply(this, Array.prototype.slice.call(arguments));
+					}
+
+					return $delegate;
+
+				})
+				.decorator("$controller", function($delegate) {
+
+					var originalController = $delegate;
+
+					return function(expression) {
+						console.log("controller: " + expression);
+
+						var args = Array.prototype.slice.call(arguments);
+
+						if (expression === "demoDirCtrl") {
+							args[0] = "MyCtrl";
+						}
+
+						return originalController.apply(this, args);
+					};
+
+
+				});
+
+		</script>
+	</body>
+
+</html>

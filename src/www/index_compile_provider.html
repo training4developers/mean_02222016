@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				<div demo-dir2>{{message | toUpperCase}}</div>
+			</div>
+		</div>
+
+		<script>
+
+			var compileProvider = null;
+
+			angular.module("MyApp", [])
+				// .directive("demoDir", function() {
+				// 	return {
+				// 		link: function() {
+				// 			console.log("demo dir post-link");
+				// 		}
+				// 	}
+				// })
+				.filter("toUpperCase", function() {
+
+					return function(value) {
+						console.log("toUpperCase filter");
+						return String(value).toUpperCase();
+					}
+
+				})
+				.controller("MyCtrl", function($scope, $compile, $timeout) {
+					console.log("MyCtrl controller");
+					$scope.message = "Hi Class!";
+
+					$timeout(function() {
+
+						compileProvider.directive("testDir", function() {
+							return {
+								link: function(scope, element) {
+									element.html("directive found");
+								}
+							}
+						});
+
+						tpl = "<div test-dir>no directive</div>";
+						console.log($compile(tpl)($scope).html());
+
+					}, 3000);
+
+
+				})
+				.config(function($compileProvider) {
+
+					console.dir($compileProvider);
+
+					compileProvider = $compileProvider;
+
+				});
+				// .config(function($provide) {
+				// 	$provide.decorator
+				// });
+				// .decorator("demoDirDirective", function($delegate) {
+				//
+				// 	return $delegate;
+				// })
+
+
+		</script>
+	</body>
+
+</html>

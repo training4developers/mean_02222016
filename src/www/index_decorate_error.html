@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+
+		<script>
+
+			console.dir(angular.module("MyApp", []));
+
+			angular.module("MyApp", [])
+				.decorator("$log", function($delegate) { })
+				.controller("MyCtrl", function($scope, $log) {
+					$log.error("test");
+					$scope.message = "Hi Class!";
+				});
+
+		</script>
+	</body>
+
+</html>

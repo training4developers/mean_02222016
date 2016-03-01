@@ -10,15 +10,70 @@
 	<body>
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
+				{{message}}
 			</div>
 		</div>
 
 		<script>
 
+			var niceDay = false;
+
+			function getMyCtrl() {
+				return ["$scope", niceDay ? "demoFactory": "demoSvc2", "demoLog",
+					function($scope, demoSvc, demoLog) {
+						$scope.message = "Hi Class!";
+						//demoSvc.doSomething();
+						demoLog.log("this is a test of demo log!");
+					}];
+			}
+
 			angular.module("MyApp", [])
-				.controller("MyCtrl", function($scope) {
-					$scope.message = "Hi Class!";
-				});
+				.provider("demoLog", function() {
+
+					var _prefix = "";
+
+					return {
+
+						setPrefix: function(prefix) {
+							_prefix = prefix
+						},
+
+						$get: function() {
+
+							return {
+								setPrefix: function() {
+
+								},
+								log: function(msg) {
+									console.log(_prefix + " " + msg)
+								}
+							}
+
+						}
+					}
+
+				})
+				.config(function(demoLogProvider) {
+					demoLogProvider.setPrefix("MyApp>")
+
+				})
+				.factory("demoFactory", function() {
+
+					return {
+						doSomething: function() {
+							console.log("did it!");
+						}
+					};
+
+				})
+				.service("demoSvc2", function() {
+
+					this.doSomething = function() {
+						console.log("did it 2!");
+					};
+
+				})
+				.controller("MyCtrl", getMyCtrl());
 
 		</script>
 	</body>

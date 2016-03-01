@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
+		<base href="/">
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ui-view></div>
+		</div>
+
+		<script>
+
+			angular.module("MyApp", ["ui.router"])
+				.config(function($stateProvider, $urlRouterProvider, $locationProvider) {
+
+					$urlRouterProvider.otherwise("/");
+					$locationProvider.html5Mode(false);
+
+					$stateProvider
+						.state("home", {
+							url: "/",
+							template: "<h1>{{message}}</h1>" +
+								"<a ui-sref='about.details({ section: \"mission\" })'>About 1</a><br>" +
+								"<a ui-sref='about.details({ p1: 1, p2: 2 })'>About 2</a><br>" +
+								"<a href='#' ui-sref='about.mission'>Mission</a><br>" +
+								"<a href='#' ng-click='gotoContact()'>Contact</a><br>",
+							controller: function($scope, $state) {
+								$scope.message = "Home";
+								$scope.gotoContact = function() {
+									$state.go("contact", {
+										section:"address"
+									});
+								};
+							}
+						})
+						.state("about", {
+							template: "<h1>{{msg}}</h1><div ui-view></div>",
+							controller: function($scope) {
+								$scope.msg = "About";
+							}
+						})
+						.state("about.mission", {
+							template: "<h2>{{msg}}</h2><a href='#' ui-sref='^'>About</a>" +
+								"<br><a href='#' ui-sref='^.team'>Team</a>",
+							controller: function($scope) {
+								$scope.msg = "Mission";
+							}
+						})
+						.state("about.team", {
+							template: "<h2>{{msg}}</h2><a href='#' ui-sref='^'>About</a>" +
+								"<br><a href='#' ui-sref='^.mission'>Mission</a>",
+							controller: function($scope) {
+								$scope.msg = "Team";
+							}
+						})
+						// .state("about", {
+						// 	data: {
+						// 		requiredRole: "public"
+						// 	},
+						// 	template: "<h1>{{title}}</h1><div ui-view='mission'></div>" +
+						// 		"<div ui-view='history'></div>" +
+						// 		"<div ui-view='team'></div>",
+						// 	controller: function($scope, $state) {
+						// 		$scope.title = "About Us";
+						// 		$state.current.data.title = "About Us";
+						// 		//console.dir($state.current);
+						// 	}
+						// })
+						// .state("about.details", {
+						// 	url: "/about?p1&p2",
+						// 	data: {
+						// 		showDetails: true
+						// 	},
+						// 	views: {
+						// 		mission: {
+						// 			template: "<h2>Mission</h2>",
+						// 			controller: function($scope, $state, $stateParams) {
+						// 				console.log($state.current.data);
+						// 				console.dir($stateParams);
+						// 			}
+						// 		},
+						// 		history: {
+						// 			template: "<h2>History</h2>"
+						// 		},
+						// 		team: {
+						// 			template: "<h2>Team</h2>"
+						// 		}
+						// 	}
+						// })
+						// .state("about", {
+						// 	url: "/about/:section",
+						// 	params: {
+						// 		section: "top"
+						// 	},
+						// 	template: "<h1>{{message}}</h1><a ui-sref='home'>Home</a>",
+						// 	controller: function($scope, $stateParams) {
+						// 		$scope.message = "About";
+						// 		console.dir($stateParams);
+						// 	}
+						// })
+						// .state("contact", {
+						// 	data: {
+						// 		msg: "test"
+						// 	},
+						// 	params: {
+						// 		section: "top"
+						// 	},
+						// 	template: "<h1>{{message}}</h1><a ui-sref='home'>Home</a>",
+						// 	controller: function($scope, $stateParams, $state) {
+						// 		$scope.message = "About";
+						// 		console.dir($stateParams);
+						// 		console.dir($state.$current.data);
+						// 	}
+						// })
+
+				});
+
+
+		</script>
+	</body>
+
+</html>

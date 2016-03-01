@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.20/angular.js"></script>
+	</head>
+
+	<body>
+		<div ng-app="MyApp">
+			<div ng-controller="MyCtrl">
+				{{message}}
+			</div>
+		</div>
+
+		<script>
+
+			var compileProvider = null;
+
+			angular.module("MyApp", [])
+				.config(function($provide) {
+					$provide.decorator("$log", function($delegate) {
+						console.log($delegate);
+						//return $delegate;
+					})
+				})
+				// .directive("demoDir", function() {
+				// 	return {
+				// 		link: function() {
+				// 			console.log("demo dir post-link");
+				// 		}
+				// 	}
+				// })
+				// .filter("toUpperCase", function() {
+				//
+				// 	return function(value) {
+				// 		console.log("toUpperCase filter");
+				// 		return String(value).toUpperCase();
+				// 	}
+				//
+				// })
+				// .controller("demoDirController", function() {
+				// 	console.log("demo dir controller");
+				// })
+				.controller("MyCtrl", function($scope, $rootScope) {
+					console.log("MyCtrl controller");
+
+					//console.dir(window.$log);
+
+					$log.error("test");
+					$scope.message = "Hi Class!";
+				})
+				// .controller("MyCtrl2", function($scope) {
+				// 	console.log("MyCtrl2 controller");
+				// 	$scope.message = "Hi Class2!";
+				// })
+				// .decorator("demoDirDirective", function($delegate) {
+				//
+				// 	console.dir($delegate[0]);
+				//
+				// 	$delegate[0].controller = "demoDirController";
+				//
+				// 	return $delegate;
+				// })
+				// .decorator("toUpperCaseFilter", ["$delegate", function($delegate) {
+				//
+				// 	var originalFilter = $delegate;
+				//
+				// 	return function() {
+				//
+				// 		var originalOutput = originalFilter.apply(this, Array.prototype.slice.call(arguments));
+				//
+				// 		return originalOutput.toLowerCase();
+				//
+				// 	}
+				// }])
+				// .decorator("$controller", function($delegate) {
+				//
+				// 	console.dir($delegate);
+				//
+				// 	var originalController = $delegate;
+				//
+				// 	return function() {
+				// 		console.log("ctrl exp: " + arguments[0]);
+				//
+				// 		if (arguments[0] === "MyCtrl") {
+				// 			arguments[0] = "MyCtrl2";
+				// 		}
+				//
+				// 		return originalController.apply(this, Array.prototype.slice.call(arguments))
+				// 	};
+				//
+				// })
+
+
+		</script>
+	</body>
+
+</html>

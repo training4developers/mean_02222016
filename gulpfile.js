@@ -16,7 +16,11 @@ gulp.task("copy", function() {
 
 gulp.task("templates", function() {
 	gulp.src("src/www/tpls/**/*")
-		.pipe(templateCache())
+		.pipe(templateCache({
+			module: "MyApp.Templates",
+			root: "/tpls/",
+			moduleSystem: "IIFE"
+		}))
 		.pipe(gulp.dest("dist/www/js"))
 });
 
