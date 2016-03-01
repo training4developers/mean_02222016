@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+	</head>
+
+	<body>
+		<script>
+
+			// $.ajax({
+			// 	success: function() {
+			// 		$.ajax({
+			// 			success: function() {
+			// 				$.ajax({
+			// 					success: function() {
+			// 						$.ajax({
+			// 							success:function() {
+			//
+			// 							}
+			// 						})
+			// 					}
+			// 				})
+			// 			}
+			// 		})
+			// 	}
+			// })
+
+
+			// var p = new Promise(function doAsyncTask(resolve, reject) {
+			//
+			// 	throw Error("something went wrong...");
+			//
+			// 	setTimeout(function() {
+			// 		console.log("done 1");
+			// 		resolve("done 1");
+			// 	}, 2000);
+			//
+			// });
+			//
+			// p.then(function doSomething(result) {
+			// 	console.log("I did it! " + result);
+			//
+			// 	return new Promise(function(resolve, reject) {
+			// 		setTimeout(function() {
+			// 			console.log("done 2");
+			// 			resolve("done 2");
+			// 		}, 2000);
+			// 	});
+			//
+			// }).then(function(result) {
+			//
+			// 	console.log("I did it! " + result);
+			//
+			// }).catch(function(result) {
+			// 	console.log("I did not do it! " + result);
+			// });
+			// console.log("waiting...");
+
+
+			try {
+
+				setTimeout(function() {
+					throw Error("something did not work right...");
+				}, 2000);
+
+			} catch(err) {
+				console.log(err);
+			}
+
+
+		</script>
+	</body>
+
+</html>

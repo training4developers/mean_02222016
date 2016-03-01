@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+	</head>
+
+	<body>
+		<script>
+
+			function doAsyncTask(fn) {
+
+				setTimeout(function() {
+					console.log("all done");
+					fn("all done");
+				}, 3000);
+				console.log("waiting...");
+
+			}
+
+
+			doAsyncTask(function doSomething(result) {
+				console.log("I did it!" + result);
+			});
+
+		</script>
+	</body>
+
+</html>

@@ -10,70 +10,46 @@
 	<body>
 		<div ng-app="MyApp">
 			<div ng-controller="MyCtrl">
-				{{message}}
+
 			</div>
 		</div>
-
 		<script>
 
-			var niceDay = false;
-
-			function getMyCtrl() {
-				return ["$scope", niceDay ? "demoFactory": "demoSvc2", "demoLog",
-					function($scope, demoSvc, demoLog) {
-						$scope.message = "Hi Class!";
-						//demoSvc.doSomething();
-						demoLog.log("this is a test of demo log!");
-					}];
-			}
+			//console.log((function($q) { }).toString());
 
 			angular.module("MyApp", [])
-				.provider("demoLog", function() {
+				.controller("MyCtrl", function($q) {
 
-					var _prefix = "";
+					var p = new Promise(function(resolve, reject) {
 
-					return {
+						setTimeout(function() {
+							resolve("did it!");
+						}, 2000);
 
-						setPrefix: function(prefix) {
-							_prefix = prefix
-						},
+					});
 
-						$get: function() {
+					function doAsyncTask() {
 
-							return {
-								setPrefix: function() {
+						var d = $q.defer();
 
-								},
-								log: function(msg) {
-									console.log(_prefix + " " + msg)
-								}
-							}
+						setTimeout(function() {
+							d.resolve("did it!");
+						}, 2000);
 
-						}
+						return d.promise;
+
 					}
 
-				})
-				.config(function(demoLogProvider) {
-					demoLogProvider.setPrefix("MyApp>")
+					doAsyncTask();
 
-				})
-				.factory("demoFactory", function() {
+					console.log("waiting");
 
-					return {
-						doSomething: function() {
-							console.log("did it!");
-						}
-					};
+					p.then(function(result) {
+						console.log(result);
+					});
 
-				})
-				.service("demoSvc2", function() {
 
-					this.doSomething = function() {
-						console.log("did it 2!");
-					};
-
-				})
-				.controller("MyCtrl", getMyCtrl());
+				});
 
 		</script>
 	</body>

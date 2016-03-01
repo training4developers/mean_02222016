@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<title>Welcome to MEAN Stack Class!</title>
+	</head>
+
+	<body>
+		<script>
+
+			function createPromise(delay, shouldResolve, data) {
+					return new Promise(function(resolve, reject) {
+						setTimeout(function() {
+							if (shouldResolve) {
+								console.log("resolved: " + data);
+								resolve(data);
+							} else {
+								console.log("rejected: " + data);
+								reject(data);
+							}
+						}, delay);
+					});
+			}
+
+			var
+				p1 = createPromise(2000, true, "promise 1"),
+				p2 = createPromise(4000, true, "promise 2"),
+				p3 = createPromise(6000, false, "promise 3"),
+				p4 = createPromise(8000, true, "promise 4");
+
+			p1.then(function() {
+				console.log("leg of p1");
+			});
+
+			p1.then(function() {
+				console.log("second leg of p1");
+			});
+
+			var p5 = Promise.all([p1,p2,p4]).then(function() {
+				console.log("p1, p2, and p4 are good...");
+			});
+
+			Promise.all([p5, p3]).then(function() {
+				console.log("all resolved");
+				console.dir(arguments);
+			}).catch(function(results) {
+				console.log("one rejected");
+				console.dir(arguments);
+			});
+
+
+		</script>
+	</body>
+
+</html>
