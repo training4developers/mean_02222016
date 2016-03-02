@@ -1,169 +1,22 @@
 <!DOCTYPE html>
 
 <html>
-
 	<head>
-		<title>Welcome to MEAN Stack Class!</title>
-		<script src="/socket.io/socket.io.js"></script>
-		<script src="libs/angular/angular.js"></script>
+		<title>Widget App</title>
+		<base href="/">
 	</head>
 
 	<body>
-		<div ng-app="MyApp">
-			<div ng-controller="MyCtrl">
-				<table>
-					<tr ng-repeat="widget in widgets">
-						<td>{{widget.name}}</td>
-						<td>{{widget.description}}</td>
-						<td>{{widget.color}}</td>
-						<td>{{widget.size}}</td>
-						<td>{{widget.quantity}}</td>
-					</tr>
-				</table>
+		<main ng-controller="home">
+			{{message}}
+		</main>
 
-			</div>
-		</div>
-		<script>
-
-			function widgetsFactory(http, baseUrl, Promise) {
-
-				return {
-					getAll: function() {
-						return http.get(`${baseUrl}/widgets`);
-					},
-					get: function(widgetId) {
-						return http.get(`${baseUrl}/widgets/${encodeURIComponent(widgetId)}`);
-					},
-					insert: function(widget) {
-						if (widget.id) {
-							return Promise.reject("widget already has an id");
-						}
-						//delete widget.id;
-						return http.post(`${baseUrl}/widgets`, widget);
-					},
-					update: function(widget) {
-
-					},
-					save: function(widget) {
-						if (widget.id) {
-							return this.update(widget);
-						} else {
-							return this.insert(widget);
-						}
-					},
-					delete: function(widgetId) {
-
-					}
-				};
-
-			}
-
-			angular.module("MyApp", [])
-				.factory("mongoInterceptor", function() {
-
-					return {
-						request: function(config) {
-							if (config.data) {
-								config.data._id = config.data.id;
-								delete config.data.id;
-							}
-							return config;
-						},
-						response: function(response) {
-							if (response.data instanceof Array) {
-								response.data.forEach(function(data) {
-									data.id = data._id;
-									delete data._id;
-									delete data.__v;
-								});
-							} else {
-								response.data.id = response.data._id;
-								delete response.data._id;
-								delete response.data.__v;
-							}
-							return response;
-						}
-					}
-
-				})
-				.factory("tokenInterceptor", function() {
-
-					return {
-						request: function(config) {
-							config.headers["X-Demo-Header"] = "demotest";
-							return config;
-						}
-					}
-
-				})
-				.factory("fireAndForget", function() {
-
-					var socket = io("http://localhost:8080");
-
-					return function(eventName, eventData) {
-						socket.emit(eventName, eventData);
-					};
-
-				})
-				.decorator("$log", function($delegate, fireAndForget) {
-
-					var originalError = $delegate.error;
-
-					$delegate.error = function(msg) {
-						fireAndForget("client-error", msg);
-						originalError.apply(this, Array.prototype.slice(arguments));
-					};
-
-					return $delegate;
-
-				})
-				.factory("errorInterceptor", function($q, $log) {
-
-					return {
-						responseError: function(rejection) {
-							console.dir(rejection);
-							$log.error(rejection);
-							return $q.reject(rejection);
-						}
-
-					};
-
-				})
-				.config(function($httpProvider) {
-					$httpProvider.interceptors.push("mongoInterceptor");
-					$httpProvider.interceptors.push("tokenInterceptor");
-					$httpProvider.interceptors.push("errorInterceptor");
-				})
-				.constant("API_URL", "http://localhost:8080/api")
-				.factory("widgets", function($http, API_URL, $q) {
-
-					return widgetsFactory($http, API_URL, $q);
-
-				})
-				.controller("MyCtrl", function($scope, widgets, $timeout) {
-
-					widgets.getAll().then(function(results) {
-						$scope.widgets = results.data;
-						console.dir($scope.widgets);
-					});
-
-					widgets.get("56449b2249d09d4b29253c7a").then(function(results) {
-						console.log(results.data);
-					});
-
-					widgets.insert({
-						name: "Kyle Widget",
-						description: "Kyle's Signature Premium Select Rewards Widget",
-						color: "Hot Pink",
-						size: "Yuuuuuuggge",
-						quantity: 10
-					}).then(function(results){
-						console.dir(results.data);
-					});
-
-				});
-
-		</script>
+		<script src="libs/angular/angular.js"></script>
+		<script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
+		<script src="js/init.js"></script>
+		<script src="js/constants.js"></script>
+		<script src="js/controllers/home.js"></script>
+		<script src="js/app.js"></script>
 	</body>
 
 </html>

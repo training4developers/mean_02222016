@@ -1,9 +1,9 @@
 (function(angular) {
 
-	angular.module("MyApp.Constants", []);
-	angular.module("MyApp.Services", ["MyApp.Constants"]);
-	angular.module("MyApp.Controllers", ["MyApp.Services"]);
+	angular.module("WidgetApp.Constants", []);
+	angular.module("WidgetApp.Services", ["WidgetApp.Constants"]);
+	angular.module("WidgetApp.Controllers", ["WidgetApp.Services"]);
 
-	angular.module("MyApp", ["MyApp.Services", "MyApp.Controllers"]);
+	angular.module("WidgetApp", ["ui.router", "WidgetApp.Services", "WidgetApp.Controllers"]);
 
 })(angular);
