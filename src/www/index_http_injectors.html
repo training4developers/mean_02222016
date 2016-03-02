@@ -25,40 +25,16 @@
 		</div>
 		<script>
 
-			function widgetsFactory(http, baseUrl, Promise) {
-
-				return {
-					getAll: function() {
-						return http.get(`${baseUrl}/widgets`);
-					},
-					get: function(widgetId) {
-						return http.get(`${baseUrl}/widgets/${encodeURIComponent(widgetId)}`);
-					},
-					insert: function(widget) {
-						if (widget.id) {
-							return Promise.reject("widget already has an id");
-						}
-						//delete widget.id;
-						return http.post(`${baseUrl}/widgets`, widget);
-					},
-					update: function(widget) {
-
-					},
-					save: function(widget) {
-						if (widget.id) {
-							return this.update(widget);
-						} else {
-							return this.insert(widget);
-						}
-					},
-					delete: function(widgetId) {
-
-					}
-				};
-
-			}
-
 			angular.module("MyApp", [])
+				.factory("fireAndForget", function() {
+
+					var socket = io("http://localhost:8080");
+
+					return function(eventName, eventData) {
+						socket.emit(eventName, eventData);
+					};
+
+				})
 				.factory("mongoInterceptor", function() {
 
 					return {
@@ -96,27 +72,6 @@
 					}
 
 				})
-				.factory("fireAndForget", function() {
-
-					var socket = io("http://localhost:8080");
-
-					return function(eventName, eventData) {
-						socket.emit(eventName, eventData);
-					};
-
-				})
-				.decorator("$log", function($delegate, fireAndForget) {
-
-					var originalError = $delegate.error;
-
-					$delegate.error = function(msg) {
-						fireAndForget("client-error", msg);
-						originalError.apply(this, Array.prototype.slice(arguments));
-					};
-
-					return $delegate;
-
-				})
 				.factory("errorInterceptor", function($q, $log) {
 
 					return {
@@ -129,37 +84,62 @@
 					};
 
 				})
+				.decorator("$log", function($delegate, fireAndForget) {
+
+					var originalError = $delegate.error;
+
+					$delegate.error = function(msg) {
+						fireAndForget("client-error", msg);
+						originalError.call(this, Array.prototype.slice.call(arguments));
+					};
+
+					return $delegate;
+				})
+				.factory("widgets", function($http) {
+
+					return {
+						getAll: function() {
+							return $http.get("http://localhost:8080/api/widgets");
+						},
+						insert: function(widget) {
+							return $http.post("http://localhost:8080/api/widgets", widget);
+						},
+						update: function(widget) {
+							return $http.put("http://localhost:8080/api/widgets/" + encodeURIComponent(widget.id), widget);
+						}
+					};
+
+				})
 				.config(function($httpProvider) {
 					$httpProvider.interceptors.push("mongoInterceptor");
 					$httpProvider.interceptors.push("tokenInterceptor");
 					$httpProvider.interceptors.push("errorInterceptor");
 				})
-				.constant("API_URL", "http://localhost:8080/api")
-				.factory("widgets", function($http, API_URL, $q) {
-
-					return widgetsFactory($http, API_URL, $q);
-
-				})
 				.controller("MyCtrl", function($scope, widgets, $timeout) {
 
-					widgets.getAll().then(function(results) {
-						$scope.widgets = results.data;
-						console.dir($scope.widgets);
+					function refreshWidgets() {
+						widgets.getAll().then(function(results) {
+							$scope.widgets = results.data;
+							console.dir($scope.widgets);
+						});
+					}
+
+
+					$timeout(function() {
+						widgets.update({
+							id: "56d6686626038b2105acff47",
+							name: "New Widget222",
+							description: "New Widget Desc",
+							color: "red",
+							size: "large",
+							quantity: 100
+						});
+					}, 1000).then(function() {
+						refreshWidgets();
 					});
 
-					widgets.get("56449b2249d09d4b29253c7a").then(function(results) {
-						console.log(results.data);
-					});
+					refreshWidgets();
 
-					widgets.insert({
-						name: "Kyle Widget",
-						description: "Kyle's Signature Premium Select Rewards Widget",
-						color: "Hot Pink",
-						size: "Yuuuuuuggge",
-						quantity: 10
-					}).then(function(results){
-						console.dir(results.data);
-					});
 
 				});
 
