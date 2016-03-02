@@ -7,6 +7,10 @@ module.exports = function(io) {
 			socket.emit("echo", message);
 		});
 
+		socket.on("client-error", function(error) {
+			global.logger.error(`client error: ${JSON.stringify(error)}`);
+		});
+
 	});
 
 

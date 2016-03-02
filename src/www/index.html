@@ -4,6 +4,7 @@
 
 	<head>
 		<title>Welcome to MEAN Stack Class!</title>
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="libs/angular/angular.js"></script>
 	</head>
 
@@ -25,20 +26,112 @@
 		<script>
 
 			angular.module("MyApp", [])
+				.factory("fireAndForget", function() {
+
+					var socket = io("http://localhost:8080");
+
+					return function(eventName, eventData) {
+						socket.emit(eventName, eventData);
+					};
+
+				})
+				.factory("mongoInterceptor", function() {
+
+					return {
+						request: function(config) {
+							config._id = config.id;
+							delete config.id;
+							return config;
+						},
+						response: function(response) {
+							if (response.data instanceof Array) {
+								response.data.forEach(function(data) {
+									data.id = data._id;
+									delete data._id;
+									delete data.__v;
+								});
+							} else {
+								response.data.id = response.data._id;
+								delete response.data._id;
+								delete response.data.__v;
+							}
+							return response;
+						}
+					}
+
+				})
+				.factory("tokenInterceptor", function() {
+
+					return {
+						request: function(config) {
+							config.headers["X-Demo-Header"] = "demotest";
+							return config;
+						}
+					}
+
+				})
+				.factory("errorInterceptor", function($q, $log) {
+
+					return {
+						responseError: function(rejection) {
+							$log.error(rejection);
+							return $q.reject($q);
+						}
+
+					};
+
+				})
+				.decorator("$log", function($delegate, fireAndForget) {
+
+					var originalError = $delegate.error;
+
+					$delegate.error = function(msg) {
+						fireAndForget("client-error", msg);
+						originalError.call(this, Array.prototype.slice.call(arguments));
+					};
+
+					return $delegate;
+				})
 				.factory("widgets", function($http) {
 
 					return {
 						getAll: function() {
-							return $http.get("http://localhost:8080/api/widgets");
+							return $http.get("http://localhost:8080/aapi/widgets");
+						},
+						insert: function(widget) {
+							return $http.post("http://localhost:8080/aapi/widgets", widget);
 						}
 					};
 
 				})
-				.controller("MyCtrl", function($scope, widgets) {
+				.config(function($httpProvider) {
+					$httpProvider.interceptors.push("mongoInterceptor");
+					$httpProvider.interceptors.push("tokenInterceptor");
+					$httpProvider.interceptors.push("errorInterceptor");
+				})
+				.controller("MyCtrl", function($scope, widgets, $timeout) {
 
-					widgets.getAll().then(function(results) {
-						$scope.widgets = results.data;
+					function refreshWidgets() {
+						widgets.getAll().then(function(results) {
+							$scope.widgets = results.data;
+							console.dir($scope.widgets);
+						});
+					}
+
+
+					$timeout(function() {
+						widgets.insert({
+							name: "New Widget",
+							description: "New Widget Desc",
+							color: "red",
+							size: "large",
+							quantity: 100
+						});
+					}, 1000).then(function() {
+						refreshWidgets();
 					});
+
+					refreshWidgets();
 
 
 				});
