@@ -39,8 +39,10 @@
 
 					return {
 						request: function(config) {
-							config._id = config.id;
-							delete config.id;
+							if (config.data) {
+								config.data._id = config.data.id;
+								delete config.data.id;
+							}
 							return config;
 						},
 						response: function(response) {
@@ -74,8 +76,9 @@
 
 					return {
 						responseError: function(rejection) {
+							console.dir(rejection);
 							$log.error(rejection);
-							return $q.reject($q);
+							return $q.reject(rejection);
 						}
 
 					};
@@ -96,10 +99,13 @@
 
 					return {
 						getAll: function() {
-							return $http.get("http://localhost:8080/aapi/widgets");
+							return $http.get("http://localhost:8080/api/widgets");
 						},
 						insert: function(widget) {
-							return $http.post("http://localhost:8080/aapi/widgets", widget);
+							return $http.post("http://localhost:8080/api/widgets", widget);
+						},
+						update: function(widget) {
+							return $http.put("http://localhost:8080/api/widgets/" + encodeURIComponent(widget.id), widget);
 						}
 					};
 
@@ -120,8 +126,9 @@
 
 
 					$timeout(function() {
-						widgets.insert({
-							name: "New Widget",
+						widgets.update({
+							id: "56d6686626038b2105acff47",
+							name: "New Widget222",
 							description: "New Widget Desc",
 							color: "red",
 							size: "large",
