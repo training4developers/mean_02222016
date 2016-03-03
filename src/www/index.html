@@ -7,15 +7,17 @@
 	</head>
 
 	<body>
-		<main ng-controller="home">
-			{{message}}
-		</main>
+		<main ui-view></main>
 
 		<script src="libs/angular/angular.js"></script>
 		<script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/constants.js"></script>
+		<script src="js/services/widgets.js"></script>
+		<script src="js/templates.js"></script>
+		<script src="js/configs/routes.js"></script>
 		<script src="js/controllers/home.js"></script>
+		<script src="js/controllers/mission.js"></script>
 		<script src="js/app.js"></script>
 	</body>
 

@@ -21,7 +21,7 @@ gulp.task("copy", function() {
 gulp.task("templates", function() {
 	gulp.src("src/www/tpls/**/*")
 		.pipe(templateCache({
-			module: "MyApp.Templates",
+			module: "WidgetApp.Templates",
 			root: "/tpls/",
 			moduleSystem: "IIFE"
 		}))
